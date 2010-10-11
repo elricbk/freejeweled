@@ -1,0 +1,126 @@
+#ifndef GAMEBOARD_H
+#define GAMEBOARD_H
+
+#include <QList>
+#include <QDeclarativeView>
+#include <QDeclarativeComponent>
+#include <QTimer>
+#include <QPair>
+#include <QDateTime>
+#include "GemCell.h"
+
+class GameBoard: public QDeclarativeItem
+{
+    Q_OBJECT
+    Q_PROPERTY(int level READ level WRITE setLevel NOTIFY levelChanged)
+    Q_PROPERTY(int score READ score WRITE setScore NOTIFY scoreChanged)
+    Q_PROPERTY(int selGemRow READ selGemRow WRITE setSelGemRow NOTIFY selGemRowChanged)
+    Q_PROPERTY(int selGemColumn READ selGemColumn WRITE setSelGemColumn NOTIFY selGemColumnChanged)
+    Q_PROPERTY(bool gemSelected READ gemSelected WRITE setGemSelected NOTIFY gemSelectedChanged)
+public:
+    GameBoard(QDeclarativeItem *parent = NULL);
+    ~GameBoard();
+
+    GemCell *operator() (int row, int column) { return m_boardData[row*m_columnCount + column]; }
+    void setCell(int row, int column, GemCell *value);
+
+    int rowCount() { return m_rowCount; }
+    int columnCount() { return m_columnCount; }
+
+    int level() { return m_level; }
+    void setLevel(int level);
+
+    int score() { return m_score; }
+    void setScore(int score);
+
+    int selGemRow() { return m_selGemRow; }
+    void setSelGemRow(int row);
+
+    int selGemColumn() { return m_selGemColumn; }
+    void setSelGemColumn(int column);
+
+    int gemSelected() { return m_gemSelected; }
+    void setGemSelected(bool newValue);
+
+    Q_INVOKABLE void resetBoard();
+    Q_INVOKABLE bool markCombos();
+    Q_INVOKABLE void removeCombos();
+    Q_INVOKABLE void shuffleDown();
+    Q_INVOKABLE void fillBoard();
+    Q_INVOKABLE void removeAll();
+    Q_INVOKABLE void loadTestBoard(QString boardData);
+    Q_INVOKABLE void loadTestBoard();
+
+    Q_INVOKABLE void handleClick(int x, int y);
+
+    Q_INVOKABLE void dbgPrintGemPositions();
+
+signals:
+    void levelChanged();
+    void scoreChanged();
+    void selGemRowChanged();
+    void selGemColumnChanged();
+    void gemSelectedChanged();
+
+private slots:
+    void checkGemPositions();
+
+private:
+    enum Direction {
+        Row,
+        Column
+    };
+
+    bool cellInBoard(int row, int column);
+    void clearBoard();
+    void createBlock(int row, int column, int startRow = -1);
+    void removeZombies();
+    int index(int row, int column);
+    int levelFromScore();
+    void selectGem(int row, int column);
+    void deselectCurrentGem();
+    void markExplosions();
+    void markIntersections();
+    void markBonusGems();
+    void removeExplosions();
+    void explodeGem(int row, int column);
+    void resetInvincibleStatus();
+    void switchBack();
+    GemCell * board(int row, int column);
+    GemCell * safeGetCell(int row, int column);
+    void switchGems(int idx1, int idx2);
+    bool hyperCubeUsed();
+    void showFloatingScores();
+    void addScoreItem(int row, int column, int gemType, Direction dir, int cnt);
+
+
+    QList<GemCell *> m_boardData;
+    QList<QPair<QDateTime, QDeclarativeItem *> > m_zombieItems;
+    QList<QDeclarativeItem *> m_scoreToShow;
+    int m_rowCount;
+    int m_columnCount;
+    int m_currentStepDelay;
+
+    int m_level;
+    int m_score;
+
+    QGraphicsScene *m_scene;
+    QDeclarativeComponent *m_component;
+    QDeclarativeComponent *m_textComponent;
+    QDeclarativeEngine *m_engine;
+    GemCell *m_selectedGem;
+    bool m_gemSelected;
+    int m_selGemRow;
+    int m_selGemColumn;
+    bool m_gemMovedByUser;
+    int m_currentLevelCap;
+
+    int m_usrIdx1;
+    int m_usrIdx2;
+
+    int m_comboCount;
+
+    QTimer m_timer;
+};
+
+#endif // GAMEBOARD_H
