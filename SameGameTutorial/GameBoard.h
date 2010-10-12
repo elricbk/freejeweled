@@ -92,11 +92,15 @@ private:
     bool hyperCubeUsed();
     void showFloatingScores();
     void addScoreItem(int row, int column, int gemType, Direction dir, int cnt);
+    void saveGemModififers();
+    void restoreGemModifiers();
+    void restoreModifier(GemCell::Modifier modifier);
 
 
     QList<GemCell *> m_boardData;
     QList<QPair<QDateTime, QDeclarativeItem *> > m_zombieItems;
     QList<QDeclarativeItem *> m_scoreToShow;
+    QMap<GemCell::Modifier, int> m_boardModifiers;
     int m_rowCount;
     int m_columnCount;
     int m_currentStepDelay;

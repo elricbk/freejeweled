@@ -89,6 +89,7 @@ void GameBoard::setCell(int row, int column, GemCell *value)
 
 void GameBoard::resetBoard()
 {
+    saveGemModififers();
     clearBoard();
 
     for (int i = 0; i < m_rowCount; ++i) {
@@ -96,6 +97,7 @@ void GameBoard::resetBoard()
             createBlock(i, j);
         }
     }
+    restoreGemModifiers();
 }
 
 bool GameBoard::markCombos()
@@ -997,5 +999,56 @@ void GameBoard::setLevel(int level)
         = 5*level*(level+3)/2 */
         m_currentLevelCap = 5*level*(level + 3)/2*LEVEL_CAP_MULTIPLYER;
         emit levelChanged();
+    }
+}
+
+/* Saves existing modififers for gems in boards. Should be used when there is a level up to restore
+any modififers user had. */
+void GameBoard::saveGemModififers()
+{
+    m_boardModifiers[GemCell::Explosive] = 0;
+    m_boardModifiers[GemCell::RowColumnRemove] = 0;
+    m_boardModifiers[GemCell::HyperCube] = 0;
+
+    for (int i = 0; i < m_boardData.count(); ++i) {
+        GemCell *curCell = m_boardData[i];
+        if ((curCell != NULL) && (curCell->modifier() != GemCell::Normal))
+            ++m_boardModifiers[curCell->modifier()];
+    }
+}
+
+/* This function restores modifiers for game board, which was previously saved via
+saveGemModififers() function. Board for which gem modofoers are restored should not contain any
+NULL values */
+void GameBoard::restoreGemModifiers()
+{
+    for (int i = 0; i < m_boardData.count(); ++i) {
+        if (m_boardData[i] == NULL)
+            return;
+    }
+
+    Q_ASSERT(m_boardModifiers[GemCell::Explosive] + m_boardModifiers[GemCell::RowColumnRemove]
+        + m_boardModifiers[GemCell::Explosive] <= m_rowCount*m_columnCount);
+
+    restoreModifier(GemCell::Explosive);
+    restoreModifier(GemCell::RowColumnRemove);
+    restoreModifier(GemCell::HyperCube);
+}
+
+/* Restores one modifier to the gems in board. There are no checks for numberOfGemsWithNoModifiers
+< numberOfModifiers, so it should be done on the caller's side */
+void GameBoard::restoreModifier(GemCell::Modifier modifier)
+{
+    if (modifier == GemCell::Normal)
+        return;
+
+    Q_ASSERT(m_boardModifiers.contains(modifier));
+
+    while (m_boardModifiers[modifier] > 0) {
+        int cellNumber = ceil(rand()*64.0/RAND_MAX);
+        if (m_boardData[cellNumber]->modifier() == GemCell::Normal) {
+            m_boardData[cellNumber]->setModifier(modifier);
+            --m_boardModifiers[modifier];
+        }
     }
 }

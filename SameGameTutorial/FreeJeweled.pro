@@ -6,7 +6,7 @@
 
 QT       += core gui declarative
 
-TARGET = SameGameTutorial
+TARGET = FreeJeweled
 TEMPLATE = app
 
 
