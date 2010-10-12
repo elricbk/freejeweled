@@ -1161,6 +1161,8 @@ void GameBoard::saveBoardStateToFile()
     QFile outFile("save.board");
     if (outFile.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream outStream(&outFile);
+        outStream << score() << "\n";
+        outStream << level() << "\n";
         outStream << toString();
         outFile.close();
     }
