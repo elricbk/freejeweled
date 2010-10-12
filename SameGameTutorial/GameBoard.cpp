@@ -951,12 +951,14 @@ void GameBoard::addScoreItem(int row, int column, int gemType, Direction dir, in
         m_textComponent->create());
     item->setParentItem(this);
 
+    /* Here we set coordinates of score text item. They should be one row higher than combo row to
+    make them easily distinguishable */
     if (dir == Row) {
-        item->setX((column - ceil(cnt*1.0/2))*CELL_SIZE);
-        item->setY(row*CELL_SIZE);
+        item->setX( (column - ceil(cnt*1.0/2))*CELL_SIZE );
+        item->setY( (row - 1)*CELL_SIZE );
     } else {
         item->setX(column*CELL_SIZE);
-        item->setY((row - ceil(cnt*1.0/2))*CELL_SIZE);
+        item->setY( (row - cnt - 1)*CELL_SIZE );
     }
 
     item->setProperty("type", gemType);

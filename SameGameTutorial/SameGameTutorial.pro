@@ -19,3 +19,10 @@ HEADERS  += \
     GameBoard.h
 
 FORMS    +=
+
+OTHER_FILES += \
+    SimpleButton.qml \
+    Shine.qml \
+    ScoreText.qml \
+    SameGameTutorial_simple.qml \
+    Block_simple.qml

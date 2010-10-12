@@ -1,7 +1,6 @@
 import Qt 4.7
 //import "qml"
 import com.mycompany.gemcell 1.0
-import Effects 1.0
 
 Rectangle {
     id: screen
@@ -129,11 +128,6 @@ Rectangle {
         style: Text.Outline
         smooth: true
         styleColor: "red"
-        effect: DropShadow {
-            blurRadius: 3
-            offset.x: 5
-            offset.y: 5
-        }
         z: 5
         opacity: 0
 

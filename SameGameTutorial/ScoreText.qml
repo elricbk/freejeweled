@@ -1,5 +1,4 @@
 import Qt 4.7
-import Effects 1.0
 
 Text {
     id: scoreLabel
@@ -16,7 +15,7 @@ Text {
         if (type == 1)
             return "red";
         else if (type == 2)
-            return "blue";
+            return "steelblue";
         else if (type == 3)
             return "green";
         else if (type == 4)
@@ -28,13 +27,6 @@ Text {
         else if (type == 0)
             return "yellow";
     }
-
-    effect: DropShadow {
-        blurRadius: 3
-        offset.x: 2
-        offset.y: 2
-    }
-
 
     ParallelAnimation {
         id: scoreLabelAnimation
