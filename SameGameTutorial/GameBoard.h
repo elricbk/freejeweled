@@ -73,7 +73,8 @@ private:
 
     bool cellInBoard(int row, int column);
     void clearBoard();
-    void createBlock(int row, int column, int startRow = -1);
+    GemCell * createBlock(int row, int column, int startRow = -1);
+    int generateCellType();
     void removeZombies();
     int index(int row, int column);
     int levelFromScore();
@@ -88,6 +89,7 @@ private:
     void switchBack();
     GemCell * board(int row, int column);
     GemCell * safeGetCell(int row, int column);
+    int safeGetCellType(int row, int column);
     void switchGems(int idx1, int idx2);
     bool hyperCubeUsed();
     void showFloatingScores();

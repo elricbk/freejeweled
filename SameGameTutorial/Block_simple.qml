@@ -17,8 +17,8 @@ GemCell {
     property int behaviorPause: 0
 
 
-	width: 40
-	height: 40
+    width: 40
+    height: 40
     opacity: {
         if ((x < -width/2) || (y < -width/2))
             return 0;

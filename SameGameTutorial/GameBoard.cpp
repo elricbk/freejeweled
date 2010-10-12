@@ -87,6 +87,8 @@ void GameBoard::setCell(int row, int column, GemCell *value)
     m_boardData[row*m_columnCount + column] = value;
 }
 
+/* Resets board for new level. Saves gem modifiers and restores it after new board is created. Also
+checks for combos in newly created board and changes gem types so there are no combos */
 void GameBoard::resetBoard()
 {
     saveGemModififers();
@@ -94,7 +96,25 @@ void GameBoard::resetBoard()
 
     for (int i = 0; i < m_rowCount; ++i) {
         for (int j = 0; j < m_columnCount; ++j) {
-            createBlock(i, j);
+            GemCell *block = createBlock(i, j);
+            Q_ASSERT(block != NULL);
+
+            /* Initial variables for combo in cell and combo in row */
+            int blockType = block->property("type").toInt();
+            bool comboInRow = (safeGetCellType(i, j - 1) == blockType)
+                && (safeGetCellType(i, j - 2) == blockType);
+            bool comboInColumn = (safeGetCellType(i - 1, j) == blockType)
+                && (safeGetCellType(i - 2, j) == blockType);
+
+            /* Generating new types until appropriate found */
+            while (comboInRow || comboInColumn) {
+                int newType = generateCellType();
+                block->setProperty("type", newType);
+                comboInRow = (safeGetCellType(i, j - 1) == newType)
+                    && (safeGetCellType(i, j - 2) == newType);
+                comboInColumn = (safeGetCellType(i - 1, j) == newType)
+                    && (safeGetCellType(i - 2, j) == newType);
+            }
         }
     }
     restoreGemModifiers();
@@ -117,7 +137,7 @@ bool GameBoard::markCombos()
             typeToDestroy = gem2->property("type").toInt();
             hyperCubeIndex = m_usrIdx1;
         } else {
-            typeToDestroy = floor(rand()*7.0/RAND_MAX);
+            typeToDestroy = generateCellType();
             hyperCubeIndex = m_usrIdx1;
             hyperCubeIndex2 = m_usrIdx2;
         }
@@ -255,17 +275,18 @@ int GameBoard::index(int row, int column)
     return (row*m_columnCount + column);
 }
 
-void GameBoard::createBlock(int row, int column, int startRow)
+/* Function to create block. Automatically adds it to the game board. */
+GemCell * GameBoard::createBlock(int row, int column, int startRow)
 {
     Q_ASSERT(m_component != NULL);
     Q_ASSERT(scene() != NULL);
     if (!cellInBoard(row, column))
-        return;
+        return NULL;
 
     GemCell *curCell = qobject_cast<GemCell *>(m_component->create());
     this->scene()->addItem(curCell);
     curCell->setParentItem(this);
-    curCell->setProperty("type", floor(rand()*7/RAND_MAX));
+    curCell->setProperty("type", generateCellType());
     curCell->setWidth(CELL_SIZE);
     curCell->setHeight(CELL_SIZE);
     curCell->setY(startRow*CELL_SIZE);
@@ -275,6 +296,14 @@ void GameBoard::createBlock(int row, int column, int startRow)
     curCell->setProperty("spawned", true);
     curCell->setModifier(GemCell::Normal);
     m_boardData[index(row, column)] = curCell;
+    return curCell;
+}
+
+
+/* Generate random cell type. Utility function to use in different places. */
+int GameBoard::generateCellType()
+{
+    return floor(rand()*7.0/RAND_MAX);
 }
 
 void GameBoard::clearBoard()
@@ -859,6 +888,18 @@ GemCell * GameBoard::safeGetCell(int row, int column)
     return m_boardData[index(row, column)];
 }
 
+/* Special function that return -1 for cell gem type if this cell is null or out of board */
+int GameBoard::safeGetCellType(int row, int column)
+{
+    if (!cellInBoard(row, column)) {
+        return -1;
+    } else if (board(row, column) == NULL) {
+        return -1;
+    } else {
+        return board(row, column)->property("type").toInt();
+    }
+}
+
 /* Function to remove 'invincible' status from all gems. Called at end of one round of gem removal.
 Bonus gems that were created during round are invincible for this round, but can be destructed in
 the next one. Also resets some other statuses, yhat should be cleared for next round of removal. */
@@ -1045,7 +1086,7 @@ void GameBoard::restoreModifier(GemCell::Modifier modifier)
     Q_ASSERT(m_boardModifiers.contains(modifier));
 
     while (m_boardModifiers[modifier] > 0) {
-        int cellNumber = ceil(rand()*64.0/RAND_MAX);
+        int cellNumber = floor(rand()*64.0/RAND_MAX);
         if (m_boardData[cellNumber]->modifier() == GemCell::Normal) {
             m_boardData[cellNumber]->setModifier(modifier);
             --m_boardModifiers[modifier];
