@@ -32,7 +32,7 @@ Rectangle {
         id: topGameBoardBorder
         color: "white"
         opacity: 0.5
-        anchors.bottom: gameBoard.top
+        anchors.top: scoreBox.bottom
         height: 5
         width: parent.width
     }
@@ -50,7 +50,7 @@ Rectangle {
         id: gameBoard
         width: 320
         height: 320
-        anchors.centerIn: parent
+        anchors.top: topGameBoardBorder.bottom
 
         MouseArea {
             anchors.fill: parent
@@ -97,24 +97,37 @@ Rectangle {
         anchors.topMargin: 2
     }
 
-    Text {
-        color: "white"
-        font.family: gameFont.name
-        font.pointSize: 16
-        font.bold: true
-        text: "     " + gameBoard.score
-        anchors.bottom: topGameBoardBorder.top
-        anchors.left: parent.left
-    }
+    Item {
+        id: scoreBox
 
-    Text {
-        color: "white"
-        font.family: gameFont.name
-        font.pointSize: 16
-        font.bold: true
-        text: "Level " + gameBoard.level +" "
-        anchors.bottom: topGameBoardBorder.top
-        anchors.right: parent.right
+        width: parent.width
+        height: 60 /* cellSize, actually */
+
+        anchors.top: parent.top
+
+        Text {
+            color: "white"
+            font.family: gameFont.name
+            font.pointSize: 16
+            font.bold: true
+            text: gameBoard.score
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.bottomMargin: 5
+        }
+
+        Text {
+            color: "white"
+            font.family: gameFont.name
+            font.pointSize: 16
+            font.bold: true
+            text: "Level " + gameBoard.level +" "
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.bottomMargin: 5
+        }
     }
 
     Text {
@@ -151,42 +164,54 @@ Rectangle {
         }
     }
 
-    SimpleButton {
-        id: btnReset
-        anchors.bottom: parent.bottom
-        color: "red"
-        caption: "Reset"
+    Item {
+        id: toolBar
+        width: parent.width
+        height: parent.height - scoreBox.height - topGameBoardBorder.height - gameBoard.height - bottomGameBoardBorder.height - pbLevelProgress.height
+        anchors.top: pbLevelProgress.bottom
 
-        onClicked: gameBoard.resetBoard()
-    }
+        SimpleButton {
+            id: btnReset
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            color: "red"
+            caption: "Reset"
 
-    SimpleButton {
-        id: btnRemoveAll
-        anchors.bottom: parent.bottom
-        anchors.left: btnReset.right
-        caption: "Run"
-        color: "steelblue"
+            onClicked: gameBoard.resetBoard()
+        }
 
-        onClicked: gameBoard.removeAll()
-    }
+        SimpleButton {
+            id: btnRemoveAll
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: btnReset.right
+            anchors.leftMargin: 10
+            caption: "Run"
+            color: "steelblue"
 
-    SimpleButton {
-        id: btnLoadTest
-        anchors.bottom: parent.bottom
-        anchors.left: btnRemoveAll.right
-        caption: "Test"
-        color: "green"
+            onClicked: gameBoard.removeAll()
+        }
 
-        onClicked: gameBoard.loadTestBoard()
-    }
+        SimpleButton {
+            id: btnLoadTest
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: btnRemoveAll.right
+            anchors.leftMargin: 10
+            caption: "Test"
+            color: "green"
 
-    SimpleButton {
-        id: btnLevelUp
-        anchors.bottom: parent.bottom
-        anchors.left: btnLoadTest.right
-        caption: "LevelUp"
-        color: "gold"
+            onClicked: gameBoard.loadTestBoard()
+        }
 
-        onClicked: gameBoard.level += 1
+        SimpleButton {
+            id: btnLevelUp
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: btnLoadTest.right
+            anchors.leftMargin: 10
+            caption: "LevelUp"
+            color: "gold"
+
+            onClicked: gameBoard.level += 1
+        }
     }
 }
