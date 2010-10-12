@@ -3,6 +3,8 @@
 #include <QDeclarativeEngine>
 #include <QDebug>
 #include <QSound>
+#include <QFile>
+#include <QTextStream>
 
 /*
 "12121212"
@@ -74,6 +76,7 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
 }
 
 GameBoard::~GameBoard() {
+    saveBoardStateToFile();
     clearBoard();
     delete m_component;
     delete m_engine;
@@ -1091,5 +1094,74 @@ void GameBoard::restoreModifier(GemCell::Modifier modifier)
             m_boardData[cellNumber]->setModifier(modifier);
             --m_boardModifiers[modifier];
         }
+    }
+}
+
+QString GameBoard::toString()
+{
+    QString result;
+    for (int row = 0; row < m_rowCount; ++row) {
+        for (int column = 0; column < m_columnCount; ++column) {
+            if (board(row, column) == NULL) {
+                result += "-- ";
+            } else {
+                switch (board(row, column)->modifier()) {
+                case GemCell::Explosive:
+                    result += "E";
+                    break;
+                case GemCell::RowColumnRemove:
+                    result += "R";
+                    break;
+                case GemCell::HyperCube:
+                    result += "H";
+                    break;
+                default:
+                    result += " ";
+                }
+                result += board(row, column)->property("type").toString() + " ";
+            }
+        }
+        result += "\n";
+    }
+    return result;
+}
+
+void GameBoard::fromString(QString str)
+{
+    clearBoard();
+
+    QStringList gemStrings = str.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    if (gemStrings.count() < m_rowCount*m_columnCount)
+        return;
+
+    for (int row = 0; row < m_rowCount; ++row) {
+        for (int column = 0; column < m_columnCount; ++column) {
+            int curIdx = index(row, column);
+            QString curGemStr = gemStrings[curIdx];
+            if (curGemStr.length() < 2) {
+                GemCell *curBlock = createBlock(row, column);
+                curBlock->setProperty("type", curGemStr);
+            } else if (curGemStr != "--") {
+                GemCell *curBlock = createBlock(row, column);
+                curBlock->setProperty("type", QString(curGemStr[1]));
+                if (curGemStr[0] == 'R') {
+                    curBlock->setModifier(GemCell::RowColumnRemove);
+                } else if (curGemStr[0] == 'H') {
+                    curBlock->setModifier(GemCell::HyperCube);
+                } else if (curGemStr[0] == 'E') {
+                    curBlock->setModifier(GemCell::Explosive);
+                }
+            }
+        }
+    }
+}
+
+void GameBoard::saveBoardStateToFile()
+{
+    QFile outFile("save.board");
+    if (outFile.open(QFile::WriteOnly | QFile::Truncate)) {
+        QTextStream outStream(&outFile);
+        outStream << toString();
+        outFile.close();
     }
 }

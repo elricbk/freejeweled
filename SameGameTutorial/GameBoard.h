@@ -97,6 +97,9 @@ private:
     void saveGemModififers();
     void restoreGemModifiers();
     void restoreModifier(GemCell::Modifier modifier);
+    QString toString();
+    void fromString(QString str);
+    void saveBoardStateToFile();
 
 
     QList<GemCell *> m_boardData;
