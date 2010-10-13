@@ -78,7 +78,7 @@ Rectangle {
             }
         }
 
-        onLevelChanged: {
+        onLevelUp: {
             pbLevelProgress.minimum = gameBoard.score;
             background.source = getBackgroundSource();
             levelUpAnimation.start();
@@ -92,7 +92,7 @@ Rectangle {
         color: "white"
         secondColor: "green"
         height: 20
-        maximum: 5*gameBoard.level*(gameBoard.level + 3)/2*60
+        maximum: gameBoard.levelCap(gameBoard.level)
         value: gameBoard.score
         anchors.topMargin: 2
     }
@@ -200,7 +200,12 @@ Rectangle {
             caption: "Test"
             color: "green"
 
-            onClicked: gameBoard.loadTestBoard()
+            onClicked: {
+                gameBoard.loadBoardStateFromFile();
+                pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
+                pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
+            }
+
         }
 
         SimpleButton {
@@ -211,7 +216,7 @@ Rectangle {
             caption: "LevelUp"
             color: "gold"
 
-            onClicked: gameBoard.level += 1
+            onClicked: gameBoard.score = gameBoard.levelCap(gameBoard.level)
         }
     }
 }

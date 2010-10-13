@@ -50,10 +50,10 @@ public:
     Q_INVOKABLE void removeAll();
     Q_INVOKABLE void loadTestBoard(QString boardData);
     Q_INVOKABLE void loadTestBoard();
-
     Q_INVOKABLE void handleClick(int x, int y);
-
     Q_INVOKABLE void dbgPrintGemPositions();
+    Q_INVOKABLE void loadBoardStateFromFile();
+    Q_INVOKABLE int levelCap(int level);
 
 signals:
     void levelChanged();
@@ -61,6 +61,7 @@ signals:
     void selGemRowChanged();
     void selGemColumnChanged();
     void gemSelectedChanged();
+    void levelUp();
 
 private slots:
     void checkGemPositions();
@@ -94,12 +95,13 @@ private:
     bool hyperCubeUsed();
     void showFloatingScores();
     void addScoreItem(int row, int column, int gemType, Direction dir, int cnt);
-    void saveGemModififers();
+    void saveGemModifiers();
     void restoreGemModifiers();
     void restoreModifier(GemCell::Modifier modifier);
     QString toString();
     void fromString(QString str);
     void saveBoardStateToFile();
+
 
 
     QList<GemCell *> m_boardData;

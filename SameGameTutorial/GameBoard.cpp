@@ -94,7 +94,7 @@ void GameBoard::setCell(int row, int column, GemCell *value)
 checks for combos in newly created board and changes gem types so there are no combos */
 void GameBoard::resetBoard()
 {
-    saveGemModififers();
+    saveGemModifiers();
     clearBoard();
 
     for (int i = 0; i < m_rowCount; ++i) {
@@ -501,8 +501,10 @@ void GameBoard::setScore(int score)
     if (m_score != score) {
         m_score = score;
         emit scoreChanged();
-        if (score > m_currentLevelCap)
+        if (score >= m_currentLevelCap) {
             setLevel(level() + 1);
+            emit levelUp();
+        }
     }
 }
 
@@ -1039,16 +1041,14 @@ void GameBoard::setLevel(int level)
 {
     if (m_level != level) {
         m_level = level;
-        /* 5*(1+1)+5*(2+1)+...+5*(level+1) = 5*(1+..+level)+5*level = 5*level*(level+1)/2 + 5*level
-        = 5*level*(level+3)/2 */
-        m_currentLevelCap = 5*level*(level + 3)/2*LEVEL_CAP_MULTIPLYER;
+        m_currentLevelCap = levelCap(level);
         emit levelChanged();
     }
 }
 
-/* Saves existing modififers for gems in boards. Should be used when there is a level up to restore
+/* Saves existing modifiers for gems in boards. Should be used when there is a level up to restore
 any modififers user had. */
-void GameBoard::saveGemModififers()
+void GameBoard::saveGemModifiers()
 {
     m_boardModifiers[GemCell::Explosive] = 0;
     m_boardModifiers[GemCell::RowColumnRemove] = 0;
@@ -1089,7 +1089,7 @@ void GameBoard::restoreModifier(GemCell::Modifier modifier)
     Q_ASSERT(m_boardModifiers.contains(modifier));
 
     while (m_boardModifiers[modifier] > 0) {
-        int cellNumber = floor(rand()*m_boardData.count()*1.0/RAND_MAX);
+        int cellNumber = floor(rand() % m_boardData.count());
         if (m_boardData[cellNumber]->modifier() == GemCell::Normal) {
             m_boardData[cellNumber]->setModifier(modifier);
             --m_boardModifiers[modifier];
@@ -1134,8 +1134,10 @@ void GameBoard::fromString(QString str)
     clearBoard();
 
     QStringList gemStrings = str.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-    if (gemStrings.count() < m_rowCount*m_columnCount)
+    if (gemStrings.count() < m_rowCount*m_columnCount) {
+        qDebug() << "Too few gemStrings" << gemStrings.count();
         return;
+    }
 
     for (int row = 0; row < m_rowCount; ++row) {
         for (int column = 0; column < m_columnCount; ++column) {
@@ -1171,4 +1173,36 @@ void GameBoard::saveBoardStateToFile()
         outStream << toString();
         outFile.close();
     }
+}
+
+/* Loading board state from file (with predefined name) */
+void GameBoard::loadBoardStateFromFile()
+{
+    QFile inFile("save.board");
+    if (inFile.open(QFile::ReadOnly)) {
+        QTextStream inStream(&inFile);
+        QString strScore, strLevel, strBoardLine, strBoard;
+        inStream >> strScore;
+        inStream >> strLevel;
+        do {
+            strBoardLine = inStream.readLine();
+            strBoard += strBoardLine;
+        } while (!strBoardLine.isNull());
+
+        bool ok;
+
+        setLevel(strLevel.toInt(&ok));
+        Q_ASSERT(ok);
+        setScore(strScore.toInt(&ok));
+        Q_ASSERT(ok);
+        fromString(strBoard);
+    }
+}
+
+/* Method for getting level cap for given level */
+int GameBoard::levelCap(int level)
+{
+    /* 5*(1+1)+5*(2+1)+...+5*(level+1) = 5*(1+..+level)+5*level = 5*level*(level+1)/2 + 5*level
+    = 5*level*(level+3)/2 */
+    return (5*level*(level + 3)/2*LEVEL_CAP_MULTIPLYER);
 }
