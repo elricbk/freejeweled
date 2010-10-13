@@ -164,7 +164,7 @@ bool GameBoard::markCombos()
     }
 
 
-    /* Идём по строкам */
+    /* Looking in rows */
     int cnt;
     int lastType;
     bool found = false;
@@ -181,7 +181,7 @@ bool GameBoard::markCombos()
             if ((cell != NULL) && (type == lastType)) {
                 cnt++;
             } else {
-                /* Проверяем, найдено ли комбо */
+                /* Checking for combo */
                 if (cnt >= 3) {
                     addScoreItem(row, col, lastType, GameBoard::Row, cnt);
 
@@ -192,7 +192,7 @@ bool GameBoard::markCombos()
                     }
                 }
 
-                /* Сбрасываем счётчик */
+                /* Resetting the counter */
                 cnt = 1;
                 if (cell != NULL) {
                     lastType = type;
@@ -202,7 +202,7 @@ bool GameBoard::markCombos()
             }
         }
 
-        /* Проверяем случай комбо в конце строки */
+        /* Checking for combo at the end of row */
         if (cnt >= 3) {
             addScoreItem(row, m_columnCount, lastType, GameBoard::Row, cnt);
 
@@ -214,7 +214,7 @@ bool GameBoard::markCombos()
         }
     }
 
-    /* И по столбцам */
+    /* And in columns */
     for (int col = 0; col < m_columnCount; col++) {
         cnt = 0;
         lastType = -1;
@@ -228,7 +228,7 @@ bool GameBoard::markCombos()
             if ((cell != NULL) && (type == lastType)) {
                 cnt++;
             } else {
-                /* Проверяем, найдено ли комбо */
+                /* Checking for combo */
                 if (cnt >= 3) {
                     addScoreItem(row, col, lastType, GameBoard::Column, cnt);
 
@@ -239,7 +239,7 @@ bool GameBoard::markCombos()
                     }
                 }
 
-                /* Сбрасываем счётчик */
+                /* Resetting the counter */
                 cnt = 1;
                 if (cell != NULL) {
                     lastType = type;
@@ -249,7 +249,7 @@ bool GameBoard::markCombos()
             }
         }
 
-        /* Проверяем случай комбо в конце столбца */
+        /* Checking for the combo at the end of column */
         if (cnt >= 3) {
             addScoreItem(m_rowCount, col, lastType, GameBoard::Column, cnt);
 
@@ -1089,7 +1089,7 @@ void GameBoard::restoreModifier(GemCell::Modifier modifier)
     Q_ASSERT(m_boardModifiers.contains(modifier));
 
     while (m_boardModifiers[modifier] > 0) {
-        int cellNumber = floor(rand()*64.0/RAND_MAX);
+        int cellNumber = floor(rand()*m_boardData.count()*1.0/RAND_MAX);
         if (m_boardData[cellNumber]->modifier() == GemCell::Normal) {
             m_boardData[cellNumber]->setModifier(modifier);
             --m_boardModifiers[modifier];
@@ -1097,6 +1097,8 @@ void GameBoard::restoreModifier(GemCell::Modifier modifier)
     }
 }
 
+/* Saving game board state to simple string representation. Only board is saved. Score and level
+should be saved separately. */
 QString GameBoard::toString()
 {
     QString result;
@@ -1126,6 +1128,7 @@ QString GameBoard::toString()
     return result;
 }
 
+/* Restoring game board state, which was previously saved with toString() */
 void GameBoard::fromString(QString str)
 {
     clearBoard();
@@ -1156,6 +1159,8 @@ void GameBoard::fromString(QString str)
     }
 }
 
+/* Saving board state to file (with predefined name). All information (score, level, gems in board)
+is saved. */
 void GameBoard::saveBoardStateToFile()
 {
     QFile outFile("save.board");
