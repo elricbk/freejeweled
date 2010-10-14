@@ -95,6 +95,7 @@ private:
     bool hyperCubeUsed();
     void showFloatingScores();
     void addScoreItem(int row, int column, int gemType, Direction dir, int cnt);
+    void addHyperCubeScoreItem(int row, int column, int gemType);
     void saveGemModifiers();
     void restoreGemModifiers();
     void restoreModifier(GemCell::Modifier modifier);

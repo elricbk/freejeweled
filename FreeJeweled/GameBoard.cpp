@@ -17,14 +17,14 @@
 "21212121"
 */
 
-char const * const TestBoard = "12121212"
-                               "21212121"
+char const * const TestBoard = "12321212"
+                               "33233121"
                                "12121212"
                                "21212121"
                                "12121212"
                                "21212124"
                                "12131214"
-                               "23313324";
+                               "21212124";
 
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
@@ -36,6 +36,8 @@ const int ENOUGH_TIME_TO_DIE = 1000;
 
 const int ANIMATION_STOP_THRESHOLD = 3;
 const int LEVEL_CAP_MULTIPLYER = 60;
+
+const int HYPER_CUBE_MULTIPLYER = 2;
 
 GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
 {
@@ -152,6 +154,8 @@ bool GameBoard::markCombos()
 
             if (typeFound) {
                 m_boardData[i]->setShouldBeRemoved(true);
+                addHyperCubeScoreItem(i / m_columnCount, i % m_columnCount
+                    , m_boardData[i]->property("type").toInt());
                 if (m_boardData[i]->modifier() != GemCell::Explosive)
                     m_boardData[i]->setExplodedOnce(true);
             }
@@ -985,8 +989,7 @@ void GameBoard::addScoreItem(int row, int column, int gemType, Direction dir, in
     m_comboCount++;
 
     /* Adding floating score to show */
-    QDeclarativeItem *item = qobject_cast<QDeclarativeItem *>(
-        m_textComponent->create());
+    QDeclarativeItem *item = qobject_cast<QDeclarativeItem *>(m_textComponent->create());
     item->setParentItem(this);
 
     /* Here we set coordinates of score text item. They should be one row higher than combo row to
@@ -1017,6 +1020,23 @@ void GameBoard::addScoreItem(int row, int column, int gemType, Direction dir, in
     }
 
     item->setProperty("scoreValue", scoreValue*5*(level() + 1));
+    m_scoreToShow.append(item);
+}
+
+/* This function creates HyperCube score item. HyperCube scores should be processed in special way
+so they were moved in special function  */
+void GameBoard::addHyperCubeScoreItem(int row, int column, int gemType)
+{
+    /* Creating floating score to show */
+    QDeclarativeItem *item = qobject_cast<QDeclarativeItem *>(m_textComponent->create());
+    item->setParentItem(this);
+
+    /* Here we set coordinates of score text item. They should be one row higher than combo row to
+    make them easily distinguishable */
+    item->setX( column*CELL_SIZE );
+    item->setY( (row - 1)*CELL_SIZE );
+    item->setProperty("type", gemType);
+    item->setProperty("scoreValue", HYPER_CUBE_MULTIPLYER*5*(level() + 1));
     m_scoreToShow.append(item);
 }
 
