@@ -17,14 +17,14 @@
 "21212121"
 */
 
-char const * const TestBoard = "12133212"
-                               "21233121"
-                               "12133212"
+char const * const TestBoard = "12121212"
                                "21212121"
                                "12121212"
                                "21212121"
-                               "12131212"
-                               "23313321";
+                               "12121212"
+                               "21212124"
+                               "12131214"
+                               "23313324";
 
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
@@ -46,7 +46,7 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
 
     /* Creating engine and components for dynamic object creation */
     QDeclarativeEngine *engine = new QDeclarativeEngine();
-    m_component = new QDeclarativeComponent(engine, QUrl::fromLocalFile("Block_simple.qml"));
+    m_component = new QDeclarativeComponent(engine, QUrl::fromLocalFile("Block.qml"));
     if (!m_component->isReady()) {
         qDebug() << m_component->errors();
         qCritical("[GameBoard] Can't fetch gem component from file");
@@ -125,6 +125,7 @@ void GameBoard::resetBoard()
 
 bool GameBoard::markCombos()
 {
+    /* Special HyperCube processing, finding how many hypercubes are used and type to destroy */
     if (m_gemMovedByUser && hyperCubeUsed()) {
         int typeToDestroy = -1;
         int hyperCubeIndex = -1;
@@ -164,99 +165,88 @@ bool GameBoard::markCombos()
     }
 
 
-    /* Looking in rows */
-    int cnt;
-    int lastType;
     bool found = false;
-    for (int row = 0; row < m_rowCount; row++) {
-        cnt = 0;
-        lastType = -1;
-        for (int col = 0; col < m_columnCount; col++) {
-            int idx = index(row, col);
-            GemCell *cell = m_boardData[idx];
-            int type = -1;
-            if (cell != NULL)
-                type = cell->property("type").toInt();
-
-            if ((cell != NULL) && (type == lastType)) {
-                cnt++;
-            } else {
-                /* Checking for combo */
-                if (cnt >= 3) {
-                    addScoreItem(row, col, lastType, GameBoard::Row, cnt);
-
-                    found = true;
-                    while (cnt > 0) {
-                        m_boardData[index(row, col - cnt)]->setShouldBeRemoved(true);
-                        cnt--;
-                    }
-                }
-
-                /* Resetting the counter */
-                cnt = 1;
-                if (cell != NULL) {
-                    lastType = type;
-                } else {
-                    lastType = -1;
-                }
-            }
-        }
-
-        /* Checking for combo at the end of row */
-        if (cnt >= 3) {
-            addScoreItem(row, m_columnCount, lastType, GameBoard::Row, cnt);
-
-            found = true;
-            while (cnt > 0) {
-                m_boardData[index(row, m_columnCount - cnt)]->setShouldBeRemoved(true);
-                cnt--;
-            }
-        }
+    /* Looking in rows */
+    for (int row = 0; row < m_rowCount; ++row) {
+        bool foundInLine = markCombosInLine(row, GameBoard::Row);
+        found = found || foundInLine;
+    }
+    /* Looking in columns */
+    for (int column = 0; column < m_rowCount; ++column) {
+        bool foundInLine = markCombosInLine(column, GameBoard::Column);
+        found = found || foundInLine;
     }
 
-    /* And in columns */
-    for (int col = 0; col < m_columnCount; col++) {
-        cnt = 0;
-        lastType = -1;
-        for (int row = 0; row < m_rowCount; row++) {
-            int idx = index(row, col);
-            GemCell *cell = m_boardData[idx];
-            int type = -1;
-            if (cell != NULL)
-                type = cell->property("type").toInt();
+    return found;
+}
 
-            if ((cell != NULL) && (type == lastType)) {
-                cnt++;
-            } else {
-                /* Checking for combo */
-                if (cnt >= 3) {
-                    addScoreItem(row, col, lastType, GameBoard::Column, cnt);
+/* Funciton marks combos in rows and columnd dependent on which direction parameter is passes. It is
+used to gather all checks for combo in one place */
+bool GameBoard::markCombosInLine(int lineIndex, Direction direction)
+{
+    bool found;
+    int cnt = 0;
+    int lastType = -1;
+    int stopValue;
+    if (direction == Row) {
+        stopValue = m_columnCount;
+    } else {
+        stopValue = m_rowCount;
+    }
 
-                    found = true;
-                    while (cnt > 0) {
-                        m_boardData[index(row - cnt, col)]->setShouldBeRemoved(true);
-                        cnt--;
-                    }
-                }
+    for (int i = 0; i < stopValue; ++i) {
+        GemCell *cell;
 
-                /* Resetting the counter */
-                cnt = 1;
-                if (cell != NULL) {
-                    lastType = type;
-                } else {
-                    lastType = -1;
-                }
-            }
+        /* Cell index differs for different directions */
+        if (direction == Row) {
+            cell = board(lineIndex, i);
+        } else {
+            cell = board(i, lineIndex);
+        };
+        int type = -1;
+        if (cell != NULL)
+            type = cell->property("type").toInt();
+
+        /* To increase count cell must be not NULL and has the same type as previous */
+        if ((cell != NULL) && (type == lastType)) {
+            cnt++;
         }
 
-        /* Checking for the combo at the end of column */
-        if (cnt >= 3) {
-            addScoreItem(m_rowCount, col, lastType, GameBoard::Column, cnt);
+        /* Three conditions to check for combo: NULL cell, type changed, row ended */
+        if ((cell == NULL) || (type != lastType) || (i == stopValue - 1)){
+            /* Small workaround for end-of-line combo */
+            if (i == stopValue - 1)
+                ++i;
 
-            found = true;
-            while (cnt > 0) {
-                m_boardData[index(m_rowCount - cnt, col)]->setShouldBeRemoved(true);
-                cnt--;
+            /* Checking for combo */
+            if (cnt >= 3) {
+                /* Adding score item changes for different directions */
+                if (direction == Row) {
+                    addScoreItem(lineIndex, i, lastType, GameBoard::Row, cnt);
+                } else {
+                    addScoreItem(i, lineIndex, lastType, GameBoard::Column, cnt);
+                }
+
+                found = true;
+                while (cnt > 0) {
+                    int nextIndex;
+                    /* Reverse movement is changed for different directions */
+                    if (direction == Row) {
+                        nextIndex = index(lineIndex, i - cnt);
+                    } else {
+                        nextIndex = index(i - cnt, lineIndex);
+                    }
+                    m_boardData[nextIndex]->setShouldBeRemoved(true);
+                    --cnt;
+                }
+            }
+
+            /* Resetting the counter */
+            cnt = 1;
+            if (cell != NULL) {
+                lastType = type;
+            } else {
+                lastType = -1;
             }
         }
     }

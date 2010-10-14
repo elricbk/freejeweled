@@ -172,7 +172,7 @@ Rectangle {
 
         SimpleButton {
             id: btnReset
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
             anchors.left: parent.left
             anchors.leftMargin: 10
             color: "red"
@@ -183,7 +183,7 @@ Rectangle {
 
         SimpleButton {
             id: btnRemoveAll
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
             anchors.left: btnReset.right
             anchors.leftMargin: 10
             caption: "Run"
@@ -193,11 +193,11 @@ Rectangle {
         }
 
         SimpleButton {
-            id: btnLoadTest
-            anchors.verticalCenter: parent.verticalCenter
+            id: btnLoadSave
+            anchors.top: parent.top
             anchors.left: btnRemoveAll.right
             anchors.leftMargin: 10
-            caption: "Test"
+            caption: "Load"
             color: "green"
 
             onClicked: {
@@ -210,13 +210,25 @@ Rectangle {
 
         SimpleButton {
             id: btnLevelUp
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: btnLoadTest.right
+            anchors.top: parent.top
+            anchors.left: btnLoadSave.right
             anchors.leftMargin: 10
             caption: "LevelUp"
             color: "gold"
 
             onClicked: gameBoard.score = gameBoard.levelCap(gameBoard.level)
+        }
+
+        /* Second row of buttons */
+        SimpleButton {
+            id: btnLoadTest
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            caption: "Test"
+            color: "royalblue"
+
+            onClicked: gameBoard.loadTestBoard()
         }
     }
 }

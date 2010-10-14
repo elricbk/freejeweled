@@ -101,6 +101,7 @@ private:
     QString toString();
     void fromString(QString str);
     void saveBoardStateToFile();
+    bool markCombosInLine(int lineIndex, Direction direction);
 
 
 

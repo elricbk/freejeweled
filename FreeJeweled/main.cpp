@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<GameBoard>("com.mycompany.gemcell", 1, 0, "GameBoard");
 
     QDeclarativeView view;
-    view.setSource(QUrl::fromLocalFile("SameGameTutorial_simple.qml"));
+    view.setSource(QUrl::fromLocalFile("MainForm.qml"));
     view.show();
 
 //    MainWindow w;

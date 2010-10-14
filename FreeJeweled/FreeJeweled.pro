@@ -24,5 +24,5 @@ OTHER_FILES += \
     SimpleButton.qml \
     Shine.qml \
     ScoreText.qml \
-    SameGameTutorial_simple.qml \
-    Block_simple.qml
+    MainForm.qml \
+    Block.qml
