@@ -38,6 +38,7 @@ const int ANIMATION_STOP_THRESHOLD = 3;
 const int LEVEL_CAP_MULTIPLYER = 60;
 
 const int HYPER_CUBE_MULTIPLYER = 2;
+const double DIFFICULTY_MULTIPLYER = 1.07;
 
 GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
 {
@@ -1214,5 +1215,5 @@ int GameBoard::levelCap(int level)
 {
     /* 5*(1+1)+5*(2+1)+...+5*(level+1) = 5*(1+..+level)+5*level = 5*level*(level+1)/2 + 5*level
     = 5*level*(level+3)/2 */
-    return (5*level*(level + 3)/2*LEVEL_CAP_MULTIPLYER);
+    return (5*level*(level + 3)/2*LEVEL_CAP_MULTIPLYER*pow(DIFFICULTY_MULTIPLYER, level - 1));
 }
