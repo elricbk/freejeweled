@@ -54,6 +54,7 @@ public:
     Q_INVOKABLE void dbgPrintGemPositions();
     Q_INVOKABLE void loadBoardStateFromFile();
     Q_INVOKABLE int levelCap(int level);
+    Q_INVOKABLE void showHint();
 
 signals:
     void levelChanged();
@@ -103,6 +104,9 @@ private:
     void fromString(QString str);
     void saveBoardStateToFile();
     bool markCombosInLine(int lineIndex, Direction direction);
+    bool hasPossibleCombos(int *hintIdx = NULL);
+    bool hasRowCombo(int row, int column);
+    bool hasColumnCombo(int row, int column);
 
 
 

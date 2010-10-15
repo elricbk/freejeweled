@@ -17,14 +17,14 @@
 "21212121"
 */
 
-char const * const TestBoard = "12321212"
-                               "33233121"
+char const * const TestBoard = "12121212"
+                               "21233321"
+                               "12131212"
+                               "21233121"
                                "12121212"
                                "21212121"
                                "12121212"
-                               "21212124"
-                               "12131214"
-                               "21212124";
+                               "21212121";
 
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
@@ -220,7 +220,7 @@ bool GameBoard::markCombosInLine(int lineIndex, Direction direction)
         /* Three conditions to check for combo: NULL cell, type changed, row ended */
         if ((cell == NULL) || (type != lastType) || (i == stopValue - 1)){
             /* Small workaround for end-of-line combo */
-            if (i == stopValue - 1)
+            if ((i == stopValue - 1) && (type == lastType))
                 ++i;
 
             /* Checking for combo */
@@ -660,65 +660,72 @@ void GameBoard::markIntersections()
 {
     for (int row = 0; row < m_rowCount; row++) {
          for (int col = 0; col < m_columnCount; col++) {
-             if (m_boardData[index(row, col)] == NULL)
+             if (board(row, col) == NULL)
                  continue;
-             if (!m_boardData[index(row, col)]->shouldBeRemoved())
+             if (!board(row, col)->shouldBeRemoved())
                  continue;
 
-             int rmLeft = 0;
-             int rmRight = 0;
-             int rmTop = 0;
-             int rmBottom = 0;
-             GemCell *leftCell = safeGetCell(row, col - 1);
-             GemCell *rightCell = safeGetCell(row, col + 1);
-             GemCell *topCell = safeGetCell(row - 1, col);
-             GemCell *bottomCell = safeGetCell(row + 1, col);
-             bool resultIsSane;
-
-             resultIsSane = (col > 0)
-                && (leftCell != NULL)
-                && leftCell->shouldBeRemoved();
-             if (resultIsSane) {
-                 rmLeft = leftCell->property("type").toInt();
-             } else {
-                 rmLeft = -1;
-             }
-
-             resultIsSane = (col < m_columnCount - 1)
-                && (rightCell != NULL)
-                && rightCell->shouldBeRemoved();
-             if (resultIsSane) {
-                 rmRight = rightCell->property("type").toInt();
-             } else {
-                 rmRight = -1;
-             }
-
-             resultIsSane = (row > 0)
-                && (topCell != NULL)
-                && topCell->shouldBeRemoved();
-             if (resultIsSane) {
-                 rmTop = topCell->property("type").toInt();
-             } else {
-                 rmTop = -1;
-             }
-
-             resultIsSane = (row < m_rowCount - 1)
-                && (bottomCell != NULL)
-                && bottomCell->shouldBeRemoved();
-             if (resultIsSane) {
-                 rmBottom = bottomCell->property("type").toInt();
-             } else {
-                 rmBottom = -1;
-             }
-
-             int type = m_boardData[index(row, col)]->property("type").toInt();
-             bool isIntersection = m_boardData[index(row, col)]->shouldBeRemoved()
-                && ((type == rmLeft) || (type == rmRight))
-                && ((type == rmTop) || (type == rmBottom));
+             bool isIntersection = hasRowCombo(row, col) && hasColumnCombo(row, col);
              if (isIntersection) {
-                 m_boardData[index(row, col)]->setModifier(GemCell::RowColumnRemove);
-                 m_boardData[index(row, col)]->setInvincible(true);
+                 board(row, col)->setModifier(GemCell::RowColumnRemove);
+                 board(row, col)->setInvincible(true);
              }
+
+
+//             int rmLeft = 0;
+//             int rmRight = 0;
+//             int rmTop = 0;
+//             int rmBottom = 0;
+//             GemCell *leftCell = safeGetCell(row, col - 1);
+//             GemCell *rightCell = safeGetCell(row, col + 1);
+//             GemCell *topCell = safeGetCell(row - 1, col);
+//             GemCell *bottomCell = safeGetCell(row + 1, col);
+//             bool resultIsSane;
+
+//             resultIsSane = (col > 0)
+//                && (leftCell != NULL)
+//                && leftCell->shouldBeRemoved();
+//             if (resultIsSane) {
+//                 rmLeft = leftCell->property("type").toInt();
+//             } else {
+//                 rmLeft = -1;
+//             }
+
+//             resultIsSane = (col < m_columnCount - 1)
+//                && (rightCell != NULL)
+//                && rightCell->shouldBeRemoved();
+//             if (resultIsSane) {
+//                 rmRight = rightCell->property("type").toInt();
+//             } else {
+//                 rmRight = -1;
+//             }
+
+//             resultIsSane = (row > 0)
+//                && (topCell != NULL)
+//                && topCell->shouldBeRemoved();
+//             if (resultIsSane) {
+//                 rmTop = topCell->property("type").toInt();
+//             } else {
+//                 rmTop = -1;
+//             }
+
+//             resultIsSane = (row < m_rowCount - 1)
+//                && (bottomCell != NULL)
+//                && bottomCell->shouldBeRemoved();
+//             if (resultIsSane) {
+//                 rmBottom = bottomCell->property("type").toInt();
+//             } else {
+//                 rmBottom = -1;
+//             }
+
+//             int type = m_boardData[index(row, col)]->property("type").toInt();
+//             bool isIntersection = m_boardData[index(row, col)]->shouldBeRemoved()
+//                && ((type == rmLeft) || (type == rmRight))
+//                && ((type == rmTop) || (type == rmBottom));
+//             if (isIntersection) {
+//                 m_boardData[index(row, col)]->setModifier(GemCell::RowColumnRemove);
+//                 m_boardData[index(row, col)]->setInvincible(true);
+//             }
          }
     }
 }
@@ -1216,4 +1223,117 @@ int GameBoard::levelCap(int level)
     /* 5*(1+1)+5*(2+1)+...+5*(level+1) = 5*(1+..+level)+5*level = 5*level*(level+1)/2 + 5*level
     = 5*level*(level+3)/2 */
     return (5*level*(level + 3)/2*LEVEL_CAP_MULTIPLYER*pow(DIFFICULTY_MULTIPLYER, level - 1));
+}
+
+/* Method for finding any available combo for current game board state. If hintIdx parameter is
+passes it is set to first found possible combo */
+bool GameBoard::hasPossibleCombos(int *hintIdx)
+{
+    for (int row = 0; row < m_rowCount; ++row) {
+        for (int column = 0; column < m_columnCount; ++column) {
+            int type = safeGetCellType(row, column);
+            int possibleIdx = -1;
+            if (type != -1) {
+                /* Checking for possible combo to right of the current cell */
+                bool sameTypeGemIsNear = false;
+                if (safeGetCellType(row, column + 1) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row, column + 1);
+                    qDebug() << "[hasPossibleCombos] safeGetCellType(row, column + 1)" << safeGetCellType(row, column + 1);
+                } else if (safeGetCellType(row - 1, column + 1) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row - 1, column + 1);
+                    qDebug() << "[hasPossibleCombos] safeGetCellType(row - 1, column + 1)" << safeGetCellType(row - 1, column + 1);
+                } else if (safeGetCellType(row + 1, column + 1) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row + 1, column + 1);
+                    qDebug() << "[hasPossibleCombos] safeGetCellType(row + 1, column + 1)" << safeGetCellType(row + 1, column + 1);
+                } else if (safeGetCellType(row, column + 2) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row, column + 2);
+                    qDebug() << "[hasPossibleCombos] safeGetCellType(row, column + 2)" << safeGetCellType(row, column + 2);
+                }
+                bool hasCombo = (safeGetCellType(row, column - 1) == type) && sameTypeGemIsNear;
+                if (hasCombo) {
+                    qDebug() << "[hasPossibleCombos] Previous" << safeGetCellType(row, column - 1);
+                    qDebug() << "[hasPossibleCombos] Row-column" << row << column;
+                    qDebug() << "[hasPossibleCombos] Gem type" << type;
+                    qDebug() << "[hasPossibleCombos] Found possible row combo" << possibleIdx;
+                    if (hintIdx != NULL)
+                        *hintIdx = possibleIdx;
+                    return true;
+                }
+
+                /* Checking for possible combo to bottom of the current cell */
+                sameTypeGemIsNear = false;
+                if (safeGetCellType(row + 1, column) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row + 1, column);
+                } else if (safeGetCellType(row + 1, column - 1) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row + 1, column - 1);
+                } else if (safeGetCellType(row + 1, column + 1) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row + 1, column + 1);
+                } else if (safeGetCellType(row + 2, column) == type) {
+                    sameTypeGemIsNear = true;
+                    possibleIdx = index(row + 2, column);
+                }
+                hasCombo = (safeGetCellType(row - 1, column) == type) && sameTypeGemIsNear;
+                if (hasCombo) {
+                    qDebug() << "[hasPossibleCombos] Row-column" << row << column;
+                    qDebug() << "[hasPossibleCombos] Gem type" << type;
+                    qDebug() << "[hasPossibleCombos] Found possible column combo" << possibleIdx;
+                    if (hintIdx != NULL)
+                        *hintIdx = possibleIdx;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void GameBoard::showHint()
+{
+    int hintIdx;
+    if (hasPossibleCombos(&hintIdx)) {
+        qDebug() << "[showHint]  Found some combo";
+        setProperty("hintX", hintIdx % 8 * CELL_SIZE);
+        setProperty("hintY", hintIdx / 8 * CELL_SIZE);
+        setProperty("hintVisible", true);
+    } else {
+        qDebug() << "[showHint]  No combos";
+    }
+}
+
+/* Checks if there is row combo containing (row, column) cell */
+bool GameBoard::hasRowCombo(int row, int column)
+{
+    int type = safeGetCellType(row, column);
+    if (type == -1)
+        return false;
+    bool hasCombo1 = (safeGetCellType(row, column - 2) == type)
+        && (safeGetCellType(row, column - 1) == type);
+    bool hasCombo2 = (safeGetCellType(row, column - 1) == type)
+        && (safeGetCellType(row, column + 1) == type);
+    bool hasCombo3 = (safeGetCellType(row, column + 1) == type)
+        && (safeGetCellType(row, column + 2) == type);
+    return (hasCombo1 || hasCombo2 || hasCombo3);
+}
+
+
+/* Checks if there is column combo containing (row, column) cell */
+bool GameBoard::hasColumnCombo(int row, int column)
+{
+    int type = safeGetCellType(row, column);
+    if (type == -1)
+        return false;
+    bool hasCombo1 = (safeGetCellType(row - 2, column) == type)
+        && (safeGetCellType(row - 1, column) == type);
+    bool hasCombo2 = (safeGetCellType(row - 1, column) == type)
+        && (safeGetCellType(row + 1, column) == type);
+    bool hasCombo3 = (safeGetCellType(row + 1, column) == type)
+        && (safeGetCellType(row + 2, column) == type);
+    return (hasCombo1 || hasCombo2 || hasCombo3);
 }

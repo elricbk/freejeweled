@@ -51,6 +51,9 @@ Rectangle {
         width: 320
         height: 320
         anchors.top: topGameBoardBorder.bottom
+        property int hintX: 0
+        property int hintY: 0
+        property bool hintVisible: false
 
         MouseArea {
             anchors.fill: parent
@@ -78,12 +81,30 @@ Rectangle {
             }
         }
 
+        Rectangle {
+            x: gameBoard.hintX
+            y: gameBoard.hintY
+            width: 40
+            height: 40
+            radius: 5
+            opacity: {
+                if (gameBoard.hintVisible)
+                    return 0.5
+                else
+                    return 0.0
+            }
+            z: 5
+            color: "white"
+        }
+
         onLevelUp: {
             pbLevelProgress.minimum = gameBoard.score;
             background.source = getBackgroundSource();
             levelUpAnimation.start();
             gameBoard.resetBoard();
         }
+
+
     }
 
     ProgressBar {
@@ -229,6 +250,17 @@ Rectangle {
             color: "royalblue"
 
             onClicked: gameBoard.loadTestBoard()
+        }
+
+        SimpleButton {
+            id: btnShowHint
+            anchors.bottom: parent.bottom
+            anchors.left: btnLoadTest.right
+            anchors.leftMargin: 10
+            caption: "Hint"
+            color: "beige"
+
+            onClicked: gameBoard.showHint()
         }
     }
 }
