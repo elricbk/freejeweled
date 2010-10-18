@@ -17,14 +17,14 @@
 "21212121"
 */
 
-char const * const TestBoard = "12121212"
-                               "21233321"
-                               "12131212"
-                               "21233121"
-                               "12121212"
-                               "21212121"
-                               "12121212"
-                               "21212121";
+char const * const TestBoard = "00112233"
+                               "33445500"
+                               "00112233"
+                               "33445566"
+                               "00112233"
+                               "33445501"
+                               "00112203"
+                               "33445530";
 
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
@@ -529,6 +529,9 @@ void GameBoard::handleClick(int x, int y)
             selectGem(row, column);
             return;
         } else {
+            /* Removing hint arrow */
+            setProperty("hintVisible", false);
+
             /* Remembering user choice to use later if needed */
             m_usrIdx1 = index(m_selGemRow, m_selGemColumn);
             m_usrIdx2 = index(row, column);
@@ -735,7 +738,7 @@ void GameBoard::markIntersections()
 creating two bonus gems where it should be one */
 void GameBoard::markBonusGems()
 {
-    /* Èה¸ל ןמ סענמךאל */
+    /* Checking rows */
     int cnt;
     int lastType;
     for (int row = 0; row < m_rowCount; row++) {
@@ -811,7 +814,7 @@ void GameBoard::markBonusGems()
         }
     }
 
-    /* È ןמ סעמכבצאל */
+    /* And columns */
     for (int col = 0; col < m_columnCount; col++) {
         cnt = 0;
         lastType = -1;
@@ -1226,71 +1229,62 @@ int GameBoard::levelCap(int level)
 }
 
 /* Method for finding any available combo for current game board state. If hintIdx parameter is
-passes it is set to first found possible combo */
+passes it is set to first found possible combo. We are doing it via swapping gems in board and
+testing for new combos after every swap. */
 bool GameBoard::hasPossibleCombos(int *hintIdx)
 {
+    bool result;
+    /* As we're going to swap to the right and to the bottom add -1 to column/row count */
     for (int row = 0; row < m_rowCount; ++row) {
         for (int column = 0; column < m_columnCount; ++column) {
-            int type = safeGetCellType(row, column);
-            int possibleIdx = -1;
-            if (type != -1) {
-                /* Checking for possible combo to right of the current cell */
-                bool sameTypeGemIsNear = false;
-                if (safeGetCellType(row, column + 1) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row, column + 1);
-                    qDebug() << "[hasPossibleCombos] safeGetCellType(row, column + 1)" << safeGetCellType(row, column + 1);
-                } else if (safeGetCellType(row - 1, column + 1) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row - 1, column + 1);
-                    qDebug() << "[hasPossibleCombos] safeGetCellType(row - 1, column + 1)" << safeGetCellType(row - 1, column + 1);
-                } else if (safeGetCellType(row + 1, column + 1) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row + 1, column + 1);
-                    qDebug() << "[hasPossibleCombos] safeGetCellType(row + 1, column + 1)" << safeGetCellType(row + 1, column + 1);
-                } else if (safeGetCellType(row, column + 2) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row, column + 2);
-                    qDebug() << "[hasPossibleCombos] safeGetCellType(row, column + 2)" << safeGetCellType(row, column + 2);
-                }
-                bool hasCombo = (safeGetCellType(row, column - 1) == type) && sameTypeGemIsNear;
-                if (hasCombo) {
-                    qDebug() << "[hasPossibleCombos] Previous" << safeGetCellType(row, column - 1);
-                    qDebug() << "[hasPossibleCombos] Row-column" << row << column;
-                    qDebug() << "[hasPossibleCombos] Gem type" << type;
-                    qDebug() << "[hasPossibleCombos] Found possible row combo" << possibleIdx;
+            /* Swapping right */
+            if (column != m_columnCount - 1) {
+                m_boardData.swap(index(row, column), index(row, column + 1));
+
+                if (hasRowCombo(row, column) || hasColumnCombo(row, column)) {
+                    result = true;
+                    /* If combo is here then OTHER cell should be mark with hint */
                     if (hintIdx != NULL)
-                        *hintIdx = possibleIdx;
-                    return true;
+                        *hintIdx = index(row, column + 1);
                 }
 
-                /* Checking for possible combo to bottom of the current cell */
-                sameTypeGemIsNear = false;
-                if (safeGetCellType(row + 1, column) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row + 1, column);
-                } else if (safeGetCellType(row + 1, column - 1) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row + 1, column - 1);
-                } else if (safeGetCellType(row + 1, column + 1) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row + 1, column + 1);
-                } else if (safeGetCellType(row + 2, column) == type) {
-                    sameTypeGemIsNear = true;
-                    possibleIdx = index(row + 2, column);
-                }
-                hasCombo = (safeGetCellType(row - 1, column) == type) && sameTypeGemIsNear;
-                if (hasCombo) {
-                    qDebug() << "[hasPossibleCombos] Row-column" << row << column;
-                    qDebug() << "[hasPossibleCombos] Gem type" << type;
-                    qDebug() << "[hasPossibleCombos] Found possible column combo" << possibleIdx;
+                if (hasRowCombo(row, column + 1) || hasColumnCombo(row, column + 1)) {
+                    result = true;
+                    /* If combo is here then OTHER cell should be mark with hint */
                     if (hintIdx != NULL)
-                        *hintIdx = possibleIdx;
-                    return true;
+                        *hintIdx = index(row, column);
                 }
+
+                m_boardData.swap(index(row, column), index(row, column + 1));
+                if (result)
+                    return true;
+            }
+
+            /* Swapping bottom */
+            if (row != m_rowCount - 1) {
+                m_boardData.swap(index(row, column), index(row + 1, column));
+
+                if (hasRowCombo(row, column) || hasColumnCombo(row, column)) {
+                    result = true;
+                    /* If combo is here then OTHER cell should be mark with hint */
+                    if (hintIdx != NULL)
+                        *hintIdx = index(row + 1, column);
+                }
+
+                if (hasRowCombo(row + 1, column) || hasColumnCombo(row + 1, column)) {
+                    result = true;
+                    /* If combo is here then OTHER cell should be mark with hint */
+                    if (hintIdx != NULL)
+                        *hintIdx = index(row, column);
+                }
+
+                m_boardData.swap(index(row, column), index(row + 1, column));
+                if (result)
+                    return true;
             }
         }
     }
+
     return false;
 }
 
@@ -1336,4 +1330,63 @@ bool GameBoard::hasColumnCombo(int row, int column)
     bool hasCombo3 = (safeGetCellType(row + 1, column) == type)
         && (safeGetCellType(row + 2, column) == type);
     return (hasCombo1 || hasCombo2 || hasCombo3);
+}
+
+/* Function for finding combos in gameboard without marking gems as need to be removed */
+bool GameBoard::findCombos()
+{
+    for (int row = 0; row < m_rowCount; ++row) {
+        if (findCombosInLine(row, GameBoard::Row))
+            return true;
+    }
+
+    for (int column = 0; column < m_columnCount; ++column) {
+        if (findCombosInLine(column, GameBoard::Column))
+            return true;
+    }
+
+    return false;
+}
+
+/* Finding combos in line without marking gems as need to be removed */
+bool GameBoard::findCombosInLine(int lineIndex, Direction direction)
+{
+    int cnt = 0;
+    int lastType = -1;
+    int stopValue;
+    if (direction == Row) {
+        stopValue = m_columnCount;
+    } else {
+        stopValue = m_rowCount;
+    }
+
+    for (int i = 0; i < stopValue; ++i) {
+        GemCell *cell;
+
+        /* Cell index differs for different directions */
+        if (direction == Row) {
+            cell = board(lineIndex, i);
+        } else {
+            cell = board(i, lineIndex);
+        };
+        int type = -1;
+        if (cell != NULL)
+            type = cell->property("type").toInt();
+
+        /* To increase count cell must be not NULL and has the same type as previous */
+        if ((cell != NULL) && (type == lastType))
+            cnt++;
+
+        /* Checking for combo anyway, if cnt >= 3 we're as good as done */
+        if (cnt >= 3)
+            return true;
+
+        /* Reset counter if needed */
+        if ((cell == NULL) || (type != lastType)) {
+            cnt = 1;
+            lastType = type;
+        }
+    }
+
+    return false;
 }

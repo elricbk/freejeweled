@@ -107,6 +107,8 @@ private:
     bool hasPossibleCombos(int *hintIdx = NULL);
     bool hasRowCombo(int row, int column);
     bool hasColumnCombo(int row, int column);
+    bool findCombos();
+    bool findCombosInLine(int lineIndex, Direction direction);
 
 
 

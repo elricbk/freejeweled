@@ -81,20 +81,31 @@ Rectangle {
             }
         }
 
-        Rectangle {
+        Image {
+            id: hintImage
+            source: "pics/hintArrow.png"
             x: gameBoard.hintX
-            y: gameBoard.hintY
-            width: 40
-            height: 40
-            radius: 5
+            y: gameBoard.hintY - height/4
+
             opacity: {
                 if (gameBoard.hintVisible)
-                    return 0.5
+                    return 1;
                 else
-                    return 0.0
+                    return 0;
             }
             z: 5
-            color: "white"
+            ParallelAnimation {
+                running: gameBoard.hintVisible
+                SequentialAnimation {
+                    loops: Animation.Infinite
+                    PropertyAnimation { target: hintImage; property: "y"; to: gameBoard.hintY - 3*hintImage.height/4; duration: 300; easing.type: Easing.InOutQuad }
+                    PropertyAnimation { target: hintImage; property: "y"; to: gameBoard.hintY - hintImage.height/4; duration: 300; easing.type: Easing.InOutQuad }
+                }
+                SequentialAnimation {
+                    PauseAnimation { duration: 3000 }
+                    ScriptAction { script: gameBoard.hintVisible = false }
+                }
+            }
         }
 
         onLevelUp: {
