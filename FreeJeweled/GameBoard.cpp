@@ -2,7 +2,6 @@
 #include <math.h>
 #include <QDeclarativeEngine>
 #include <QDebug>
-#include <QSound>
 #include <QFile>
 #include <QTextStream>
 
@@ -563,7 +562,6 @@ void GameBoard::selectGem(int row, int column)
     setSelGemRow(row);
     setSelGemColumn(column);
     setGemSelected(true);
-    QSound::play("chimes.wav");
 }
 
 void GameBoard::deselectCurrentGem()

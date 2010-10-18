@@ -2,7 +2,6 @@
 #define GEMCELL_H
 
 #include <QDeclarativeItem>
-#include <QSound>
 
 class GemCell : public QDeclarativeItem
 {
