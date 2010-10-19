@@ -26,4 +26,5 @@ OTHER_FILES += \
     ScoreText.qml \
     MainForm.qml \
     Block.qml \
-    MsgText.qml
+    MsgText.qml \
+    EndOfGameDialog.qml

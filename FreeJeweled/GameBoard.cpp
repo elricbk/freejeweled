@@ -1379,6 +1379,7 @@ bool GameBoard::findCombosInLine(int lineIndex, Direction direction)
 /* Function for graphical effect of dropping gems down. Used when there are no more moves */
 void GameBoard::dropGemsDown()
 {
+    QDateTime now = QDateTime::currentDateTime();
     for (int column = 0; column < m_columnCount; ++column) {
         int pause = 0;
         for (int row = m_rowCount - 1; row >= 0; --row) {
@@ -1386,7 +1387,17 @@ void GameBoard::dropGemsDown()
                 pause += rand() % 100;
                 board(row, column)->setProperty("behaviorPause", pause);
                 board(row, column)->setProperty("y", (row + m_rowCount + 1)*CELL_SIZE);
+                m_zombieItems.append(qMakePair(now, (QDeclarativeItem *)board(row, column)));
+                setCell(row, column, NULL);
             }
         }
     }
+}
+
+/* Function to start new game. Resets board, score and level */
+void GameBoard::newGame()
+{
+    setLevel(1);
+    setScore(0);
+    resetBoard();
 }

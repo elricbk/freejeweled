@@ -42,6 +42,7 @@ public:
     int gemSelected() { return m_gemSelected; }
     void setGemSelected(bool newValue);
 
+    Q_INVOKABLE void newGame();
     Q_INVOKABLE void resetBoard();
     Q_INVOKABLE bool markCombos();
     Q_INVOKABLE void removeCombos();

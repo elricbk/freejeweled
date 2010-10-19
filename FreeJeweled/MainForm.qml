@@ -108,10 +108,20 @@ Rectangle {
             }
         }
 
+        EndOfGameDialog {
+            id: dlgEndGame
+            anchors.centerIn: gameBoard
+            z: 10
+            onClosed: gameBoard.newGame()
+        }
+
         onLevelUp: {
+            msgText.text = "LEVEL UP!"
+            msgText.font.pointSize = 38
+            msgText.runAnimation();
             pbLevelProgress.minimum = gameBoard.score;
+            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level)
             background.source = getBackgroundSource();
-            levelUpAnimation.start();
             gameBoard.resetBoard();
         }
 
@@ -119,6 +129,7 @@ Rectangle {
             msgText.text = "NO MORE MOVES";
             msgText.font.pointSize = 30;
             msgText.runAnimation();
+            dlgEndGame.show("Your result\nLevel: " + gameBoard.level + "\nScore: " + gameBoard.score);
         }
     }
 
@@ -137,7 +148,7 @@ Rectangle {
         id: scoreBox
 
         width: parent.width
-        height: 60 /* cellSize, actually */
+        height: 60 /* cellSize*1.5, actually */
 
         anchors.top: parent.top
 
@@ -163,40 +174,6 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.bottomMargin: 5
-        }
-    }
-
-    Text {
-        id: txtLevelUp
-        color: "gold"
-        font.family: gameFont.name
-        font.pointSize: 38
-        font.bold: true
-        text: "LEVEL UP!"
-        anchors.centerIn: gameBoard
-        style: Text.Outline
-        smooth: true
-        styleColor: "red"
-        z: 5
-        opacity: 0
-
-        SequentialAnimation {
-            id: levelUpAnimation
-
-            ParallelAnimation {
-                NumberAnimation { target: txtLevelUp; properties: "opacity"; from: 0; to: 1; duration: 400 }
-                NumberAnimation { target: txtLevelUp; properties: "scale"; from: 0.1; to: 1; duration: 400 }
-            }
-
-//            PauseAnimation { duration: 500 }
-            NumberAnimation { target: txtLevelUp; properties: "scale"; from: 1; to: 0.7; duration: 400 }
-            NumberAnimation { target: txtLevelUp; properties: "scale"; from: 0.7; to: 1; duration: 400 }
-
-            PauseAnimation { duration: 700 }
-            ParallelAnimation {
-                NumberAnimation { target: txtLevelUp; properties: "opacity"; from: 1; to: 0; duration: 1000 }
-                NumberAnimation { target: txtLevelUp; properties: "scale"; from: 1; to: 0.1; duration: 1000 }
-            }
         }
     }
 
