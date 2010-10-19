@@ -16,14 +16,14 @@
 "21212121"
 */
 
-char const * const TestBoard = "00112233"
-                               "33445500"
-                               "00112233"
-                               "33445566"
-                               "00112233"
-                               "33445501"
-                               "00112203"
-                               "33445530";
+char const * const TestBoard = "45454545"
+                               "21212121"
+                               "45454545"
+                               "21212121"
+                               "45454545"
+                               "21212121"
+                               "45454545"
+                               "21232121";
 
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
@@ -75,6 +75,7 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
     m_selGemRow = 0;
     m_selGemColumn = 0;
     m_gemMovedByUser = false;
+    m_userInteractionAccepted = true;
 }
 
 GameBoard::~GameBoard() {
@@ -327,8 +328,41 @@ void GameBoard::removeCombos()
     }
 }
 
-void GameBoard::removeExplosions()
+/* Removes exploded gems from board. Also adds 'explosion effect' bouncing gems from explosion.
+Returns true if there were explosions and we should add pause for animation to work. */
+bool GameBoard::removeExplosions()
 {
+    bool thereAreExplosions = false;
+
+    /* If there are explosions -- move upper gems up to create explosions effect */
+    /* This code actually won't work at the moment because of main processing loop realisation and
+    due to the lack of pauses between different steps */
+//    for (int column = 0; column < m_columnCount; ++column) {
+//        int expCount = 0;
+//        for (int row = m_rowCount - 1; row >= 0; --row) {
+//            GemCell *curCell = board(row, column);
+//            if (curCell == NULL)
+//                continue;
+
+//            bool isExplosion = (curCell->shouldBeRemoved() == true)
+//                && (curCell->modifier() == GemCell::Explosive)
+//                && (!curCell->invincible());
+//            if (isExplosion) {
+//                ++expCount;
+//                thereAreExplosions = true;
+//            } else {
+//                if (expCount != 0) {
+//                    qDebug() << "[removeExplosions] Moving gem up";
+//                    int curY = curCell->property("y").toInt();
+//                    int curPause = curCell->property("behaviorPause").toInt();
+//                    curCell->setProperty("behaviorPause", curPause + m_currentStepDelay);
+//                    curCell->setProperty("y", curY - CELL_SIZE/2*expCount);
+//                }
+//            }
+//        }
+//    }
+
+    /* Actually removing explosions */
     QDateTime now = QDateTime::currentDateTime();
     for (int i = 0; i < m_boardData.count(); ++i) {
         if (m_boardData[i] == NULL)
@@ -341,6 +375,8 @@ void GameBoard::removeExplosions()
             m_boardData[i] = NULL;
         }
     }
+
+    return thereAreExplosions;
 }
 
 void GameBoard::shuffleDown()
@@ -348,11 +384,11 @@ void GameBoard::shuffleDown()
     for (int column = 0; column < m_columnCount; ++column) {
         int fallDist = 0;
         for (int row = m_rowCount - 1; row >= 0; --row) {
-            if (m_boardData[index(row, column)] == NULL) {
+            if (board(row, column) == NULL) {
                 fallDist += 1;
             } else {
                 if (fallDist > 0) {
-                   GemCell* obj = m_boardData[index(row, column)];
+                   GemCell* obj = board(row, column);
                    int curPause = obj->property("behaviorPause").toInt();
                    obj->setProperty("behaviorPause", curPause + m_currentStepDelay);
                    obj->setProperty("y", (row + fallDist) * CELL_SIZE);
@@ -371,7 +407,7 @@ void GameBoard::fillBoard()
     for (int col = 0; col < m_columnCount; col++) {
         int cnt = 1;
         for (int row = m_rowCount - 1; row >= 0; row--) {
-            if (m_boardData[index(row, col)] == NULL) {
+            if (board(row, col) == NULL) {
                 createBlock(row, col, -cnt);
                 cnt++;
             }
@@ -420,8 +456,13 @@ void GameBoard::removeAll() {
         if (m_gemMovedByUser) {
             switchGems(m_usrIdx1, m_usrIdx2);
             m_gemMovedByUser = false;
+        } else if (!hasPossibleCombos()) {
+            emit noMoreMoves();
+            QTimer::singleShot(800, this, SLOT(dropGemsDown()));
         }
+        m_userInteractionAccepted = true;
     }
+
     m_currentStepDelay = 0;
 }
 
@@ -528,28 +569,33 @@ void GameBoard::handleClick(int x, int y)
             selectGem(row, column);
             return;
         } else {
-            /* Removing hint arrow */
-            setProperty("hintVisible", false);
+            if (m_userInteractionAccepted) {
+                /* Removing hint arrow */
+                setProperty("hintVisible", false);
 
-            /* Remembering user choice to use later if needed */
-            m_usrIdx1 = index(m_selGemRow, m_selGemColumn);
-            m_usrIdx2 = index(row, column);
+                /* Remembering user choice to use later if needed */
+                m_usrIdx1 = index(m_selGemRow, m_selGemColumn);
+                m_usrIdx2 = index(row, column);
 
-            /* If hyperCube used we shouldn't switch gems */
-            if (!hyperCubeUsed())
-                switchGems(m_usrIdx1, m_usrIdx2);
+                /* If hyperCube used we shouldn't switch gems */
+                if (!hyperCubeUsed())
+                    switchGems(m_usrIdx1, m_usrIdx2);
 
-            /* Deselecting current cell to remove selection marker */
-            deselectCurrentGem();
+                /* Deselecting current cell to remove selection marker */
+                deselectCurrentGem();
 
-            /* Remember that user did this */
-            m_gemMovedByUser = true;
+                /* Remember that user did this */
+                m_gemMovedByUser = true;
 
-            /* Starting to count combos */
-            m_comboCount = 0;
+                /* Starting to count combos */
+                m_comboCount = 0;
 
-            /* Fire up timer to wait until moving gem animation ends */
-            m_timer.start();
+                /* Don't accept user actions until finished */
+                m_userInteractionAccepted = false;
+
+                /* Fire up timer to wait until moving gem animation ends */
+                m_timer.start();
+            }
         }
     }
 }
@@ -671,62 +717,6 @@ void GameBoard::markIntersections()
                  board(row, col)->setModifier(GemCell::RowColumnRemove);
                  board(row, col)->setInvincible(true);
              }
-
-
-//             int rmLeft = 0;
-//             int rmRight = 0;
-//             int rmTop = 0;
-//             int rmBottom = 0;
-//             GemCell *leftCell = safeGetCell(row, col - 1);
-//             GemCell *rightCell = safeGetCell(row, col + 1);
-//             GemCell *topCell = safeGetCell(row - 1, col);
-//             GemCell *bottomCell = safeGetCell(row + 1, col);
-//             bool resultIsSane;
-
-//             resultIsSane = (col > 0)
-//                && (leftCell != NULL)
-//                && leftCell->shouldBeRemoved();
-//             if (resultIsSane) {
-//                 rmLeft = leftCell->property("type").toInt();
-//             } else {
-//                 rmLeft = -1;
-//             }
-
-//             resultIsSane = (col < m_columnCount - 1)
-//                && (rightCell != NULL)
-//                && rightCell->shouldBeRemoved();
-//             if (resultIsSane) {
-//                 rmRight = rightCell->property("type").toInt();
-//             } else {
-//                 rmRight = -1;
-//             }
-
-//             resultIsSane = (row > 0)
-//                && (topCell != NULL)
-//                && topCell->shouldBeRemoved();
-//             if (resultIsSane) {
-//                 rmTop = topCell->property("type").toInt();
-//             } else {
-//                 rmTop = -1;
-//             }
-
-//             resultIsSane = (row < m_rowCount - 1)
-//                && (bottomCell != NULL)
-//                && bottomCell->shouldBeRemoved();
-//             if (resultIsSane) {
-//                 rmBottom = bottomCell->property("type").toInt();
-//             } else {
-//                 rmBottom = -1;
-//             }
-
-//             int type = m_boardData[index(row, col)]->property("type").toInt();
-//             bool isIntersection = m_boardData[index(row, col)]->shouldBeRemoved()
-//                && ((type == rmLeft) || (type == rmRight))
-//                && ((type == rmTop) || (type == rmBottom));
-//             if (isIntersection) {
-//                 m_boardData[index(row, col)]->setModifier(GemCell::RowColumnRemove);
-//                 m_boardData[index(row, col)]->setInvincible(true);
-//             }
          }
     }
 }
@@ -924,7 +914,7 @@ void GameBoard::resetInvincibleStatus()
 
 
 /* Function used to switch gems by indexes. Can be used to switch gems around if called twice. If
-used to switch gems around need to wait until animation ends some way */
+used to switch gems around then need to wait until animation ends some way */
 void GameBoard::switchGems(int idx1, int idx2)
 {
     int row1 = idx1 / m_columnCount;
@@ -1290,12 +1280,9 @@ void GameBoard::showHint()
 {
     int hintIdx;
     if (hasPossibleCombos(&hintIdx)) {
-        qDebug() << "[showHint]  Found some combo";
         setProperty("hintX", hintIdx % 8 * CELL_SIZE);
         setProperty("hintY", hintIdx / 8 * CELL_SIZE);
         setProperty("hintVisible", true);
-    } else {
-        qDebug() << "[showHint]  No combos";
     }
 }
 
@@ -1387,4 +1374,19 @@ bool GameBoard::findCombosInLine(int lineIndex, Direction direction)
     }
 
     return false;
+}
+
+/* Function for graphical effect of dropping gems down. Used when there are no more moves */
+void GameBoard::dropGemsDown()
+{
+    for (int column = 0; column < m_columnCount; ++column) {
+        int pause = 0;
+        for (int row = m_rowCount - 1; row >= 0; --row) {
+            if (board(row, column) != NULL) {
+                pause += rand() % 100;
+                board(row, column)->setProperty("behaviorPause", pause);
+                board(row, column)->setProperty("y", (row + m_rowCount + 1)*CELL_SIZE);
+            }
+        }
+    }
 }

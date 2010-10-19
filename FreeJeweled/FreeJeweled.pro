@@ -25,4 +25,5 @@ OTHER_FILES += \
     Shine.qml \
     ScoreText.qml \
     MainForm.qml \
-    Block.qml
+    Block.qml \
+    MsgText.qml

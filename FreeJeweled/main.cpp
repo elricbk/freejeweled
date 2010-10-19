@@ -13,8 +13,5 @@ int main(int argc, char *argv[])
     view.setSource(QUrl::fromLocalFile("MainForm.qml"));
     view.show();
 
-//    MainWindow w;
-//    w.show();
-
     return a.exec();
 }

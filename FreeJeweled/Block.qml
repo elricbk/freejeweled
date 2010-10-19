@@ -20,7 +20,7 @@ GemCell {
     width: 40
     height: 40
     opacity: {
-        if ((x < -width/2) || (y < -width/2))
+        if ((x < -width/2) || (y < -width/2) || (x >= width*8) || (y >= height*8))
             return 0;
         else
             return 1;
@@ -71,16 +71,15 @@ GemCell {
 
     Behavior on x {
         enabled: spawned && behaviorEnabled
-        SequentialAnimation {
-            SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
-        }
+        SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
     }
 
     Behavior on y {
         enabled: behaviorEnabled
         SequentialAnimation {
-            PauseAnimation { duration: behaviorPause }
+            PauseAnimation { duration: Math.floor(behaviorPause*(1 + Math.random()*0.4 - 0.2)) }
             SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
+//            PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
             ScriptAction { script: behaviorPause = 0 }
             ScriptAction { script: block.playAnimationEndSound() }
         }

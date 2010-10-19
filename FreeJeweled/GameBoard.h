@@ -63,9 +63,11 @@ signals:
     void selGemColumnChanged();
     void gemSelectedChanged();
     void levelUp();
+    void noMoreMoves();
 
 private slots:
     void checkGemPositions();
+    void dropGemsDown();
 
 private:
     enum Direction {
@@ -85,7 +87,7 @@ private:
     void markExplosions();
     void markIntersections();
     void markBonusGems();
-    void removeExplosions();
+    bool removeExplosions();
     void explodeGem(int row, int column);
     void resetInvincibleStatus();
     void switchBack();
@@ -110,8 +112,6 @@ private:
     bool findCombos();
     bool findCombosInLine(int lineIndex, Direction direction);
 
-
-
     QList<GemCell *> m_boardData;
     QList<QPair<QDateTime, QDeclarativeItem *> > m_zombieItems;
     QList<QDeclarativeItem *> m_scoreToShow;
@@ -133,6 +133,7 @@ private:
     int m_selGemColumn;
     bool m_gemMovedByUser;
     int m_currentLevelCap;
+    bool m_userInteractionAccepted;
 
     int m_usrIdx1;
     int m_usrIdx2;

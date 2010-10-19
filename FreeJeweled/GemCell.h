@@ -2,6 +2,7 @@
 #define GEMCELL_H
 
 #include <QDeclarativeItem>
+#include <QTimer>
 
 class GemCell : public QDeclarativeItem
 {

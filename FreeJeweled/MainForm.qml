@@ -115,7 +115,11 @@ Rectangle {
             gameBoard.resetBoard();
         }
 
-
+        onNoMoreMoves: {
+            msgText.text = "NO MORE MOVES";
+            msgText.font.pointSize = 30;
+            msgText.runAnimation();
+        }
     }
 
     ProgressBar {
@@ -194,6 +198,10 @@ Rectangle {
                 NumberAnimation { target: txtLevelUp; properties: "scale"; from: 1; to: 0.1; duration: 1000 }
             }
         }
+    }
+
+    MsgText {
+        id: msgText
     }
 
     Item {
