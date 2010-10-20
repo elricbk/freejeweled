@@ -15,11 +15,9 @@ Rectangle {
         page.opacity = 0;
     }
 
-    function show(txt) {
+    function show() {
         page.opened();
-//        dialogText.text = txt;
         page.state = "stateShown";
-        page.opacity = 0.7;
     }
 
     width: 200; height: 300
@@ -30,7 +28,7 @@ Rectangle {
     visible: opacity > 0
     radius: 5
     Behavior on opacity {
-        NumberAnimation { duration: 500 }
+        NumberAnimation { duration: 100 }
     }
 
     Text {
@@ -104,7 +102,37 @@ Rectangle {
 
     transitions: [
         Transition {
-            PauseAnimation { duration: 500 }
+            from: "stateHidden"
+            to: "stateShown"
+            SequentialAnimation {
+                /* Turning labeles and scores invisible */
+                PropertyAction {
+                    targets: [lblLevel, lblScore, valueLevel, valueScore, titleText];
+                    properties: "visible";
+                    value: false
+                }
+
+                /* This pause is used to wait until text message animation ends */
+                PauseAnimation { duration: 2000 }
+
+                /* Showing main page and title text */
+                PropertyAction { target: page; property: "opacity"; value: 0.7 }
+                PropertyAction { target: titleText; property: "visible"; value: true }
+                AnchorAnimation { targets: titleText; duration: 100 }
+
+                /* Turning labeles and scores visible and show 'em */
+                PauseAnimation { duration: 100 }
+                PropertyAction {
+                    targets: [lblLevel, lblScore, valueLevel, valueScore];
+                    properties: "visible";
+                    value: true
+                }
+                AnchorAnimation { duration: 500; easing.type: Easing.OutBounce }
+            }
+        },
+        Transition {
+            from: "stateShown"
+            to: "stateHidden"
             AnchorAnimation { duration: 1000 }
         }
     ]
