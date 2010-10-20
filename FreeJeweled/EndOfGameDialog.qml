@@ -113,15 +113,15 @@ Rectangle {
                 }
 
                 /* This pause is used to wait until text message animation ends */
-                PauseAnimation { duration: 2000 }
+                PauseAnimation { duration: 2800 }
 
                 /* Showing main page and title text */
                 PropertyAction { target: page; property: "opacity"; value: 0.7 }
                 PropertyAction { target: titleText; property: "visible"; value: true }
-                AnchorAnimation { targets: titleText; duration: 100 }
+                AnchorAnimation { targets: titleText; duration: 500; easing.type: Easing.OutBounce }
 
                 /* Turning labeles and scores visible and show 'em */
-                PauseAnimation { duration: 100 }
+                PauseAnimation { duration: 500 }
                 PropertyAction {
                     targets: [lblLevel, lblScore, valueLevel, valueScore];
                     properties: "visible";

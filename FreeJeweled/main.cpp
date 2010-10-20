@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 
     QDeclarativeView view;
     view.setSource(QUrl::fromLocalFile("MainForm.qml"));
+    view.setMinimumSize(320, 480);
+    view.setMaximumSize(320, 480);
     view.show();
 
     return a.exec();

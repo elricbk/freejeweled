@@ -27,4 +27,5 @@ OTHER_FILES += \
     MainForm.qml \
     Block.qml \
     MsgText.qml \
-    EndOfGameDialog.qml
+    EndOfGameDialog.qml \
+    AboutDialog.qml

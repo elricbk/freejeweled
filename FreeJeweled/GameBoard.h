@@ -43,6 +43,7 @@ public:
     void setGemSelected(bool newValue);
 
     Q_INVOKABLE void newGame();
+    Q_INVOKABLE void clearBoard();
     Q_INVOKABLE void resetBoard();
     Q_INVOKABLE bool markCombos();
     Q_INVOKABLE void removeCombos();
@@ -54,8 +55,10 @@ public:
     Q_INVOKABLE void handleClick(int x, int y);
     Q_INVOKABLE void dbgPrintGemPositions();
     Q_INVOKABLE void loadBoardStateFromFile();
+    Q_INVOKABLE void saveBoardStateToFile();
     Q_INVOKABLE int levelCap(int level);
     Q_INVOKABLE void showHint();
+    Q_INVOKABLE bool hasSave();
 
 signals:
     void levelChanged();
@@ -77,7 +80,6 @@ private:
     };
 
     bool cellInBoard(int row, int column);
-    void clearBoard();
     GemCell * createBlock(int row, int column, int startRow = -1);
     int generateCellType();
     void removeZombies();
@@ -105,7 +107,6 @@ private:
     void restoreModifier(GemCell::Modifier modifier);
     QString toString();
     void fromString(QString str);
-    void saveBoardStateToFile();
     bool markCombosInLine(int lineIndex, Direction direction);
     bool hasPossibleCombos(int *hintIdx = NULL);
     bool hasRowCombo(int row, int column);

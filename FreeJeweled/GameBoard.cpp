@@ -1401,3 +1401,9 @@ void GameBoard::newGame()
     setScore(0);
     resetBoard();
 }
+
+/* Checks for saved game file and return true if file found */
+bool GameBoard::hasSave()
+{
+    return QFile::exists("save.board");
+}
