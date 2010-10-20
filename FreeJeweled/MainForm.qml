@@ -330,7 +330,7 @@ Rectangle {
         color: "steelblue"
         width: parent.width*0.75
         height: parent.height*0.15
-        radius: 10
+        radius: height/2
         anchors.top: screen.top
         anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 75
         Text {
@@ -351,7 +351,7 @@ Rectangle {
         color: "gray"
         width: parent.width*0.75
         height: parent.height*0.15
-        radius: 10
+        radius: height/2
         anchors.top: btnClassic.bottom
         anchors.margins: 10
         Text {
@@ -368,7 +368,7 @@ Rectangle {
         color: "steelblue"
         width: parent.width*0.75
         height: parent.height*0.15
-        radius: 10
+        radius: height/2
         anchors.top: btnEndless.bottom
         anchors.margins: 10
         Text {
