@@ -189,9 +189,6 @@ bool GameBoard::markCombos()
 used to gather all checks for combo in one place */
 bool GameBoard::markCombosInLine(int lineIndex, Direction direction)
 {
-    bool found;
-    int cnt = 0;
-    int lastType = -1;
     int stopValue;
     if (direction == Row) {
         stopValue = m_columnCount;
@@ -199,6 +196,9 @@ bool GameBoard::markCombosInLine(int lineIndex, Direction direction)
         stopValue = m_rowCount;
     }
 
+    bool found = false;
+    int cnt = 0;
+    int lastType = -1;
     for (int i = 0; i < stopValue; ++i) {
         GemCell *cell;
 
@@ -208,14 +208,14 @@ bool GameBoard::markCombosInLine(int lineIndex, Direction direction)
         } else {
             cell = board(i, lineIndex);
         };
+
         int type = -1;
         if (cell != NULL)
             type = cell->property("type").toInt();
 
         /* To increase count cell must be not NULL and has the same type as previous */
-        if ((cell != NULL) && (type == lastType)) {
+        if ((cell != NULL) && (type == lastType))
             cnt++;
-        }
 
         /* Three conditions to check for combo: NULL cell, type changed, row ended */
         if ((cell == NULL) || (type != lastType) || (i == stopValue - 1)){
@@ -468,15 +468,7 @@ void GameBoard::removeAll() {
 
 void GameBoard::loadTestBoard()
 {
-    resetBoard();
-
-    int i = 0;
-    while ((i < QString(TestBoard).length()) && (i < m_boardData.count())) {
-        if (TestBoard[i] != '\n') {
-            m_boardData[i]->setProperty("type", QString(TestBoard[i]).toInt());
-        }
-        ++i;
-    }
+    loadTestBoard(QString(TestBoard));
 }
 
 void GameBoard::loadTestBoard(QString boardData)
@@ -1221,7 +1213,7 @@ passes it is set to first found possible combo. We are doing it via swapping gem
 testing for new combos after every swap. */
 bool GameBoard::hasPossibleCombos(int *hintIdx)
 {
-    bool result;
+    bool result = false;
     /* As we're going to swap to the right and to the bottom add -1 to column/row count */
     for (int row = 0; row < m_rowCount; ++row) {
         for (int column = 0; column < m_columnCount; ++column) {

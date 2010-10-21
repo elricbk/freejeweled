@@ -9,25 +9,26 @@ Item {
     property alias color: gradient1.color
     property alias secondColor: gradient2.color
 
-    width: 320; height: 30
+    width: parent.width; height: 20
     clip: true
-
-    BorderImage {
-        source: "pics/progressBarBackground.png"
-        width: parent.width; height: parent.height
-        border { left: 4; top: 4; right: 4; bottom: 4 }
-    }
 
     Rectangle {
         id: highlight
 
-        property int widthDest: ((progressbar.width * (value - minimum)) / (maximum - minimum) - 6)
+        property int widthDest: ((progressbar.width * (value - minimum)) / (maximum - minimum)
+            + highlight.height*3/2)
 
         width: highlight.widthDest
         Behavior on width { SmoothedAnimation { velocity: 1200 } }
 
-        anchors { left: parent.left; top: parent.top; bottom: parent.bottom; margins: 3 }
-        radius: 1
+        anchors {
+            left: parent.left;
+            top: parent.top;
+            bottom: parent.bottom;
+            leftMargin: -height; topMargin: 1; bottomMargin: 1
+        }
+        radius: height/2
+        smooth: true
         gradient: Gradient {
             GradientStop { id: gradient1; position: 0.0 }
             GradientStop { id: gradient2; position: 1.0 }

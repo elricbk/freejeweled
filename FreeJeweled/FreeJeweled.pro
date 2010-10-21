@@ -28,4 +28,5 @@ OTHER_FILES += \
     Block.qml \
     MsgText.qml \
     EndOfGameDialog.qml \
-    AboutDialog.qml
+    AboutDialog.qml \
+    ProgressBar.qml

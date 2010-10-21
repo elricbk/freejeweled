@@ -30,10 +30,15 @@ Rectangle {
     }
 
     AboutDialog {
-        visible: screen.state == "stateAbout"
+        id: dlgAbout
+        visible: opacity > 0
+        opacity: 0.0
         MouseArea {
             anchors.fill: parent
             onClicked: screen.state = "stateMainMenu"
+        }
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
         }
     }
 
@@ -100,15 +105,10 @@ Rectangle {
             x: gameBoard.hintX
             y: gameBoard.hintY - height/4
 
-            opacity: {
-                if (gameBoard.hintVisible)
-                    return 1;
-                else
-                    return 0;
-            }
+            visible: gameBoard.hintVisible
             z: 5
             ParallelAnimation {
-                running: gameBoard.hintVisible
+                running: hintImage.visible
                 SequentialAnimation {
                     loops: Animation.Infinite
                     PropertyAnimation { target: hintImage; property: "y"; to: gameBoard.hintY - 3*hintImage.height/4; duration: 300; easing.type: Easing.InOutQuad }
@@ -149,13 +149,13 @@ Rectangle {
     ProgressBar {
         id: pbLevelProgress
         visible: screen.state == "stateGame"
+        anchors.horizontalCenter: screen.horizontalCenter
         anchors.top: bottomGameBoardBorder.bottom
         color: "white"
         secondColor: "green"
         height: 20
         maximum: gameBoard.levelCap(gameBoard.level)
         value: gameBoard.score
-        anchors.topMargin: 2
     }
 
     Item {
@@ -327,12 +327,21 @@ Rectangle {
 
     Rectangle {
         id: btnClassic
-        color: "steelblue"
         width: parent.width*0.75
         height: parent.height*0.15
         radius: height/2
         anchors.top: screen.top
         anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 75
+        smooth: true
+        border.width: 4
+        border.color: "white"
+
+        gradient: Gradient {
+            GradientStop { color: "steelblue"; position: 0.0 }
+            GradientStop { color: Qt.lighter("steelblue"); position: 0.2 }
+            GradientStop { color: "steelblue"; position: 1.0 }
+        }
+
         Text {
             font.family: gameFont.name
             font.pointSize: 30
@@ -340,6 +349,7 @@ Rectangle {
             color: "white"
             anchors.centerIn: parent
         }
+
         MouseArea {
             anchors.fill: parent
             onClicked: screen.state = "stateGame"
@@ -348,12 +358,21 @@ Rectangle {
 
     Rectangle {
         id: btnEndless
-        color: "gray"
         width: parent.width*0.75
         height: parent.height*0.15
         radius: height/2
         anchors.top: btnClassic.bottom
         anchors.margins: 10
+        smooth: true
+        border.width: 4
+        border.color: "white"
+
+        gradient: Gradient {
+            GradientStop { color: "gray"; position: 0.0 }
+            GradientStop { color: Qt.lighter("gray"); position: 0.2 }
+            GradientStop { color: "gray"; position: 1.0 }
+        }
+
         Text {
             font.family: gameFont.name
             font.pointSize: 30
@@ -365,12 +384,21 @@ Rectangle {
 
     Rectangle {
         id: btnAbout
-        color: "steelblue"
         width: parent.width*0.75
         height: parent.height*0.15
         radius: height/2
         anchors.top: btnEndless.bottom
         anchors.margins: 10
+        smooth: true
+        border.width: 4
+        border.color: "white"
+
+        gradient: Gradient {
+            GradientStop { color: "steelblue"; position: 0.0 }
+            GradientStop { color: Qt.lighter("steelblue"); position: 0.2 }
+            GradientStop { color: "steelblue"; position: 1.0 }
+        }
+
         Text {
             font.family: gameFont.name
             font.pointSize: 30
@@ -406,6 +434,9 @@ Rectangle {
 
             /* Game elements anchors */
             AnchorChanges { target: toolBar; anchors.top: screen.bottom }
+
+            /* Showing About dialog */
+            PropertyChanges { target: dlgAbout; opacity: 1.0 }
         },
         State {
             name: "stateGame"
@@ -470,7 +501,10 @@ Rectangle {
         Transition {
             from: "stateAbout"
             to: "stateMainMenu"
-            AnchorAnimation { duration: 500; easing.type: Easing.InOutQuad }
+            SequentialAnimation {
+                ScriptAction { script: dlgAbout.opacity = 0.0 }
+                AnchorAnimation { duration: 500; easing.type: Easing.InOutQuad }
+            }
         },
         Transition {
             from: "stateGame"

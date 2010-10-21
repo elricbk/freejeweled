@@ -3,6 +3,12 @@ import Qt 4.7
 Item {
     id: dlgAbout
     anchors.fill: parent
+
+    Rectangle {
+        anchors.fill: dlgAbout
+        color: "black"
+        opacity: 0.3
+    }
     Text {
         id: dlgTitle
         anchors { horizontalCenter: dlgAbout.horizontalCenter; top: dlgAbout.top; margins: 10 }
