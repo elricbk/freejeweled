@@ -21,7 +21,7 @@ Rectangle {
     SystemPalette { id: activePalette }
 
     FontLoader { id: gameFont; source: "fonts/mailrays.ttf" }
-    FontLoader { id: mainMenuFont; source: "fonts/pirulen.ttf" }
+    FontLoader { id: buttonFont; source: "fonts/pirulen.ttf" }
     FontLoader { id: titleFont; source: "fonts/redcircle.ttf" }
 
     Image {
@@ -152,6 +152,19 @@ Rectangle {
         anchors.centerIn: gameBoard
         z: 10
         onClosed: screen.state = "stateMainMenu"
+    }
+
+    LoadSavedGameDialog {
+        id: dlgLoadSave
+        anchors.centerIn: screen
+        z: 10
+        onCancel: screen.state = "stateMainMenu"
+        onLoadSaved: {
+            gameBoard.loadBoardStateFromFile();
+            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
+            pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
+        }
+        onNewGame: gameBoard.newGame()
     }
 
     ProgressBar {
@@ -361,7 +374,7 @@ Rectangle {
         }
 
         Text {
-            font.family: mainMenuFont.name
+            font.family: buttonFont.name
             font.pointSize: 20
             text: "Classic"
             color: "white"
@@ -392,7 +405,7 @@ Rectangle {
         }
 
         Text {
-            font.family: mainMenuFont.name
+            font.family: buttonFont.name
             font.pointSize: 20
             text: "Endless"
             color: "white"
@@ -418,7 +431,7 @@ Rectangle {
         }
 
         Text {
-            font.family: mainMenuFont.name
+            font.family: buttonFont.name
             font.pointSize: 20
             text: "Action"
             color: "white"
@@ -444,7 +457,7 @@ Rectangle {
         }
 
         Text {
-            font.family: mainMenuFont.name
+            font.family: buttonFont.name
             font.pointSize: 20
             text: "About"
             color: "white"
@@ -520,9 +533,10 @@ Rectangle {
                 ScriptAction {
                     script: {
                         if (gameBoard.hasSave()) {
-                            gameBoard.loadBoardStateFromFile();
-                            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
-                            pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
+//                            gameBoard.loadBoardStateFromFile();
+//                            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
+//                            pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
+                            dlgLoadSave.show();
                         } else {
                             gameBoard.newGame();
                         }

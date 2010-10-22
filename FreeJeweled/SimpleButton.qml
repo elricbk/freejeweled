@@ -53,7 +53,8 @@ Rectangle {
         text: caption
         color: textColor
         styleColor: "black"
-        font.pointSize: 14
+        font.pointSize: 10
+        font.family: buttonFont.name
     }
 
     MouseArea {
