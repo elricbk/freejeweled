@@ -304,14 +304,19 @@ int GameBoard::generateCellType()
     return floor(rand()*7.0/RAND_MAX);
 }
 
+/* Clears game board. Gems are simple deleted, so there is no cute dying animation. Also, current
+gem must be deselected, because if not -- using it after board is cleared will cause exception. */
 void GameBoard::clearBoard()
 {
+    deselectCurrentGem();
     for (int i = 0; i < m_rowCount*m_columnCount; ++i) {
         delete m_boardData[i];
         m_boardData[i] = NULL;
     }
 }
 
+/* Removes combos from board. These are 'simple' gems. Exploded gems are removed by other
+function. */
 void GameBoard::removeCombos()
 {
     QDateTime now = QDateTime::currentDateTime();
@@ -337,6 +342,7 @@ bool GameBoard::removeExplosions()
     /* If there are explosions -- move upper gems up to create explosions effect */
     /* This code actually won't work at the moment because of main processing loop realisation and
     due to the lack of pauses between different steps */
+
 //    for (int column = 0; column < m_columnCount; ++column) {
 //        int expCount = 0;
 //        for (int row = m_rowCount - 1; row >= 0; --row) {

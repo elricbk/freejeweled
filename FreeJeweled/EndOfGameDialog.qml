@@ -3,10 +3,9 @@ import Qt 4.7
 Rectangle {
     id: page
 
-    property string title: ""
-
     signal closed
     signal opened
+
     function forceClose() {
         if(page.opacity == 0)
             return; //already closed
@@ -20,7 +19,8 @@ Rectangle {
         page.state = "stateShown";
     }
 
-    width: 200; height: 300
+    anchors.fill: parent
+    anchors.margins: 10
     state: "stateHidden"
     color: "black"
     border.width: 1
@@ -138,5 +138,5 @@ Rectangle {
     ]
 
 
-    MouseArea { anchors.fill: parent; onClicked: forceClose(); }
+    MouseArea { anchors.fill: parent; onClicked: page.forceClose(); }
 }

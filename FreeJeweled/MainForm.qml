@@ -121,13 +121,6 @@ Rectangle {
             }
         }
 
-        EndOfGameDialog {
-            id: dlgEndGame
-            anchors.centerIn: gameBoard
-            z: 10
-            onClosed: screen.state = "stateMainMenu"
-        }
-
         onLevelUp: {
             msgText.text = "LEVEL UP!"
             msgText.font.pointSize = 38
@@ -144,6 +137,13 @@ Rectangle {
             msgText.runAnimation();
             dlgEndGame.show("Your result\nLevel: " + gameBoard.level + "\nScore: " + gameBoard.score);
         }
+    }
+
+    EndOfGameDialog {
+        id: dlgEndGame
+        anchors.centerIn: gameBoard
+        z: 10
+        onClosed: screen.state = "stateMainMenu"
     }
 
     ProgressBar {

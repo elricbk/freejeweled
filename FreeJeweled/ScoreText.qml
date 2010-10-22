@@ -1,38 +1,50 @@
 import Qt 4.7
 
-Text {
-    id: scoreLabel
+Item {
+    id: scoreItem
+
+    width: 40
+    height: 40
+    opacity: 0
+
     property int type: 1
     property int shiftValue: 80
     property int scoreValue: 0
     property bool animationStarted: false
 
-    text: scoreValue
-    font.bold: true
-    font.pointSize: 16
-    opacity: 0
-    color: {
-        if (type == 1)
-            return "red";
-        else if (type == 2)
-            return "steelblue";
-        else if (type == 3)
-            return "green";
-        else if (type == 4)
-            return "purple";
-        else if (type == 5)
-            return "white";
-        else if (type == 6)
-            return "orange";
-        else if (type == 0)
-            return "yellow";
-    }
+    Text {
+        id: scoreLabel
 
-    ParallelAnimation {
-        id: scoreLabelAnimation
-        running: scoreLabel.animationStarted
-        PropertyAction { target: scoreLabel; property: "opacity"; value: 1 }
-        NumberAnimation { target: scoreLabel; property: "y"; to: scoreLabel.y - scoreLabel.shiftValue; duration: 1500 }
-        NumberAnimation { target: scoreLabel; property: "opacity"; to: 0; duration: 1500 }
+        anchors.centerIn: scoreItem
+        text: scoreItem.scoreValue
+        font.bold: true
+        font.pointSize: 16
+
+        color: {
+            if (scoreItem.type == 1)
+                return "red";
+            else if (scoreItem.type == 2)
+                return "steelblue";
+            else if (scoreItem.type == 3)
+                return "green";
+            else if (scoreItem.type == 4)
+                return "purple";
+            else if (scoreItem.type == 5)
+                return "white";
+            else if (scoreItem.type == 6)
+                return "orange";
+            else if (scoreItem.type == 0)
+                return "yellow";
+        }
+
+        ParallelAnimation {
+            id: scoreLabelAnimation
+            running: scoreItem.animationStarted
+            PropertyAction { target: scoreItem; property: "opacity"; value: 1 }
+            NumberAnimation { target: scoreItem; property: "y"; to: scoreItem.y - scoreItem.shiftValue; duration: 1500 }
+            NumberAnimation { target: scoreItem; property: "opacity"; to: 0; duration: 1500 }
+        }
     }
 }
+
+
