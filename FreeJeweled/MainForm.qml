@@ -21,12 +21,20 @@ Rectangle {
     SystemPalette { id: activePalette }
 
     FontLoader { id: gameFont; source: "fonts/mailrays.ttf" }
+    FontLoader { id: mainMenuFont; source: "fonts/pirulen.ttf" }
+    FontLoader { id: titleFont; source: "fonts/redcircle.ttf" }
 
     Image {
         id: background
         anchors.fill: parent
         source: getBackgroundSource()
         fillMode: Image.PreserveAspectCrop
+    }
+
+    Image {
+        id: bgrMainMenu
+        anchors.fill: parent
+        source: "pics/backgrounds/bgr00.jpg"
     }
 
     AboutDialog {
@@ -208,7 +216,7 @@ Rectangle {
             Transition {
                 from: "stateHidden"
                 to: "stateNormal"
-                AnchorAnimation { duration: 500; easing.type: Easing.OutBounce }
+                AnchorAnimation { duration: 200; easing.type: Easing.Linear }
             },
             Transition {
                 from: "stateNormal"
@@ -316,22 +324,31 @@ Rectangle {
 
     Text {
         id: gameTitle
-        text: "FreeJeweled"
-        anchors.topMargin: 50
+        text: "<p align=\"center\">Free<br>Jeweled</p>"
+        anchors.topMargin: 30
         anchors.horizontalCenter: parent.horizontalCenter
         font.bold: true
         font.pointSize: 40
-        font.family: gameFont.name
-        color: "white"
+        font.family: titleFont.name
+        color: "lightgray"
+
+        Image {
+            anchors.centerIn: parent
+            width: 50
+            height: 50
+            visible: gameTitle.y > 0
+            source: "pics/big/blueGem.title.png"
+            Shine { anchors { leftMargin: 10; topMargin: 10 } }
+        }
     }
 
     Rectangle {
         id: btnClassic
-        width: parent.width*0.75
-        height: parent.height*0.15
+        width: parent.width*0.7
+        height: parent.height*0.12
         radius: height/2
         anchors.top: screen.top
-        anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 75
+        anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 40
         smooth: true
         border.width: 4
         border.color: "white"
@@ -343,8 +360,8 @@ Rectangle {
         }
 
         Text {
-            font.family: gameFont.name
-            font.pointSize: 30
+            font.family: mainMenuFont.name
+            font.pointSize: 20
             text: "Classic"
             color: "white"
             anchors.centerIn: parent
@@ -358,8 +375,8 @@ Rectangle {
 
     Rectangle {
         id: btnEndless
-        width: parent.width*0.75
-        height: parent.height*0.15
+        width: parent.width*0.7
+        height: parent.height*0.12
         radius: height/2
         anchors.top: btnClassic.bottom
         anchors.margins: 10
@@ -374,8 +391,8 @@ Rectangle {
         }
 
         Text {
-            font.family: gameFont.name
-            font.pointSize: 30
+            font.family: mainMenuFont.name
+            font.pointSize: 20
             text: "Endless"
             color: "white"
             anchors.centerIn: parent
@@ -383,11 +400,37 @@ Rectangle {
     }
 
     Rectangle {
-        id: btnAbout
-        width: parent.width*0.75
-        height: parent.height*0.15
+        id: btnAction
+        width: parent.width*0.7
+        height: parent.height*0.12
         radius: height/2
         anchors.top: btnEndless.bottom
+        anchors.margins: 10
+        smooth: true
+        border.width: 4
+        border.color: "white"
+
+        gradient: Gradient {
+            GradientStop { color: "gray"; position: 0.0 }
+            GradientStop { color: Qt.lighter("gray"); position: 0.2 }
+            GradientStop { color: "gray"; position: 1.0 }
+        }
+
+        Text {
+            font.family: mainMenuFont.name
+            font.pointSize: 20
+            text: "Action"
+            color: "white"
+            anchors.centerIn: parent
+        }
+    }
+
+    Rectangle {
+        id: btnAbout
+        width: parent.width*0.7
+        height: parent.height*0.12
+        radius: height/2
+        anchors.top: btnAction.bottom
         anchors.margins: 10
         smooth: true
         border.width: 4
@@ -400,8 +443,8 @@ Rectangle {
         }
 
         Text {
-            font.family: gameFont.name
-            font.pointSize: 30
+            font.family: mainMenuFont.name
+            font.pointSize: 20
             text: "About"
             color: "white"
             anchors.centerIn: parent
@@ -419,24 +462,12 @@ Rectangle {
             AnchorChanges { target: gameTitle; anchors.top: screen.top }
             AnchorChanges { target: btnClassic; anchors.horizontalCenter: screen.horizontalCenter }
             AnchorChanges { target: btnEndless; anchors.horizontalCenter: screen.horizontalCenter }
+            AnchorChanges { target: btnAction; anchors.horizontalCenter: screen.horizontalCenter }
             AnchorChanges { target: btnAbout; anchors.horizontalCenter: screen.horizontalCenter }
 
             /* Game elements anchors */
             AnchorChanges { target: toolBar; anchors.top: screen.bottom }
-        },
-        State {
-            name: "stateAbout"
-            /* Main menu elements anchors */
-            AnchorChanges { target: gameTitle; anchors.bottom: screen.top }
-            AnchorChanges { target: btnClassic; anchors.right: screen.left }
-            AnchorChanges { target: btnEndless; anchors.left: screen.right }
-            AnchorChanges { target: btnAbout; anchors.right: screen.left }
-
-            /* Game elements anchors */
-            AnchorChanges { target: toolBar; anchors.top: screen.bottom }
-
-            /* Showing About dialog */
-            PropertyChanges { target: dlgAbout; opacity: 1.0 }
+            AnchorChanges { target: gameBoard; anchors.left: screen.right }
         },
         State {
             name: "stateGame"
@@ -444,10 +475,27 @@ Rectangle {
             AnchorChanges { target: gameTitle; anchors.bottom: screen.top }
             AnchorChanges { target: btnClassic; anchors.right: screen.left }
             AnchorChanges { target: btnEndless; anchors.left: screen.right }
-            AnchorChanges { target: btnAbout; anchors.right: screen.left }
+            AnchorChanges { target: btnAction; anchors.right: screen.left }
+            AnchorChanges { target: btnAbout; anchors.left: screen.right }
 
             /* Game elements anchors */
             AnchorChanges { target: toolBar; anchors.top: pbLevelProgress.bottom }
+            AnchorChanges { target: gameBoard; anchors.left: screen.left }
+        },
+        State {
+            name: "stateAbout"
+            /* Main menu elements anchors */
+            AnchorChanges { target: gameTitle; anchors.bottom: screen.top }
+            AnchorChanges { target: btnClassic; anchors.right: screen.left }
+            AnchorChanges { target: btnEndless; anchors.left: screen.right }
+            AnchorChanges { target: btnAction; anchors.right: screen.left }
+            AnchorChanges { target: btnAbout; anchors.left: screen.right }
+
+            /* Game elements anchors */
+            AnchorChanges { target: toolBar; anchors.top: screen.bottom }
+
+            /* Showing About dialog */
+            PropertyChanges { target: dlgAbout; opacity: 1.0 }
         }
     ]
 
@@ -461,22 +509,11 @@ Rectangle {
                         gameTitle,
                         btnClassic,
                         btnEndless,
+                        btnAction,
                         btnAbout
                     ]
                     duration: 500;
                     easing.type: Easing.InOutQuad
-                }
-                PropertyAction { target: gameBoard; property: "opacity"; value: 1.0 }
-                PropertyAnimation {
-                    duration: 500;
-                    target: gameBoard;
-                    property: "scale"; from: 5.0; to: 1.0;
-                    easing.type: Easing.OutBounce
-                }
-
-                ParallelAnimation {
-                    PropertyAction { target: scoreBox; property: "state"; value: "stateNormal" }
-                    AnchorAnimation { targets: toolBar; duration: 200 }
                 }
 
                 ScriptAction {
@@ -489,6 +526,18 @@ Rectangle {
                             gameBoard.newGame();
                         }
                     }
+                }
+
+                PropertyAction { target: bgrMainMenu; property: "visible"; value: false }
+                PropertyAction { target: gameBoard; property: "opacity"; value: 1.0 }
+                AnchorAnimation {
+                    duration: 500;
+                    targets: gameBoard;
+                }
+
+                ParallelAnimation {
+                    PropertyAction { target: scoreBox; property: "state"; value: "stateNormal" }
+                    AnchorAnimation { targets: toolBar; duration: 200 }
                 }
             }
         },
@@ -510,15 +559,22 @@ Rectangle {
             from: "stateGame"
             to: "stateMainMenu"
             SequentialAnimation {
-                ScriptAction { script: gameBoard.saveBoardStateToFile(); }
+                ScriptAction {
+                    script: {
+                        if (!gameBoard.gameLost)
+                            gameBoard.saveBoardStateToFile();
+                    }
+                }
                 PropertyAction { target: gameBoard; property: "opacity"; value: 0.0 }
                 PropertyAction { target: scoreBox; property: "state"; value: "stateHidden" }
                 AnchorAnimation { targets: toolBar; duration: 400; }
+                PropertyAction { target: bgrMainMenu; property: "visible"; value: true }
                 AnchorAnimation {
                     targets: [
                         gameTitle,
                         btnClassic,
                         btnEndless,
+                        btnAction,
                         btnAbout
                     ]
                     duration: 500;

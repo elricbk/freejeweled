@@ -76,10 +76,14 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
     m_selGemColumn = 0;
     m_gemMovedByUser = false;
     m_userInteractionAccepted = true;
+    m_gameStarted = false;
+    m_gameLost = false;
 }
 
 GameBoard::~GameBoard() {
-    saveBoardStateToFile();
+    /* Game is saved only when it was started and wasn't lost */
+    if (m_gameStarted && (!m_gameLost))
+        saveBoardStateToFile();
     clearBoard();
     delete m_component;
     delete m_engine;
@@ -464,6 +468,7 @@ void GameBoard::removeAll() {
             m_gemMovedByUser = false;
         } else if (!hasPossibleCombos()) {
             emit noMoreMoves();
+            m_gameLost = true;
             QTimer::singleShot(800, this, SLOT(dropGemsDown()));
         }
         m_userInteractionAccepted = true;
@@ -1203,6 +1208,14 @@ void GameBoard::loadBoardStateFromFile()
         setScore(strScore.toInt(&ok));
         Q_ASSERT(ok);
         fromString(strBoard);
+
+        m_gameStarted = true;
+
+        if (inFile.remove()) {
+            qDebug() << "[loadBoardStateFromFile] Save file removed";
+        } else {
+            qDebug() << "[loadBoardStateFromFile] ERROR: Can't remove save file";
+        }
     }
 }
 
@@ -1398,6 +1411,8 @@ void GameBoard::newGame()
     setLevel(1);
     setScore(0);
     resetBoard();
+    m_gameStarted = true;
+    m_gameLost = false;
 }
 
 /* Checks for saved game file and return true if file found */

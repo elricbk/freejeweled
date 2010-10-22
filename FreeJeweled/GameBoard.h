@@ -17,6 +17,7 @@ class GameBoard: public QDeclarativeItem
     Q_PROPERTY(int selGemRow READ selGemRow WRITE setSelGemRow NOTIFY selGemRowChanged)
     Q_PROPERTY(int selGemColumn READ selGemColumn WRITE setSelGemColumn NOTIFY selGemColumnChanged)
     Q_PROPERTY(bool gemSelected READ gemSelected WRITE setGemSelected NOTIFY gemSelectedChanged)
+    Q_PROPERTY(bool gameLost READ gameLost)
 public:
     GameBoard(QDeclarativeItem *parent = NULL);
     ~GameBoard();
@@ -41,6 +42,8 @@ public:
 
     int gemSelected() { return m_gemSelected; }
     void setGemSelected(bool newValue);
+
+    bool gameLost() { return m_gameLost; }
 
     Q_INVOKABLE void newGame();
     Q_INVOKABLE void clearBoard();
@@ -136,6 +139,8 @@ private:
     bool m_gemMovedByUser;
     int m_currentLevelCap;
     bool m_userInteractionAccepted;
+    bool m_gameStarted;
+    bool m_gameLost;
 
     int m_usrIdx1;
     int m_usrIdx2;
