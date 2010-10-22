@@ -432,6 +432,8 @@ void GameBoard::removeZombies()
     while (i.hasNext()) {
         QPair<QDateTime, QDeclarativeItem *> current = i.next();
         if (current.first.msecsTo(now) > ENOUGH_TIME_TO_DIE) {
+            if (current.second == m_selectedGem)
+                deselectCurrentGem();
             delete current.second;
             i.remove();
         }

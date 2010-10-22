@@ -234,7 +234,8 @@ Rectangle {
     Item {
         id: toolBar
         width: parent.width
-        height: parent.height - scoreBox.height - topGameBoardBorder.height - gameBoard.height - bottomGameBoardBorder.height - pbLevelProgress.height
+        height: parent.height - scoreBox.height - topGameBoardBorder.height - gameBoard.height
+            - bottomGameBoardBorder.height - pbLevelProgress.height
         anchors.top: pbLevelProgress.bottom
         visible: opacity > 0
 
@@ -305,7 +306,7 @@ Rectangle {
             anchors.left: btnLoadTest.right
             anchors.leftMargin: 10
             caption: "Hint"
-            color: "beige"
+            color: "green"
 
             onClicked: gameBoard.showHint()
         }
