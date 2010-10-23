@@ -22,13 +22,4 @@ Item {
             PauseAnimation { duration: 500 }
         }
     }
-
-//    NumberAnimation {
-//        target: cloudImage
-//        property: "rotation"
-//        to: 360
-//        duration: animationDuration
-//        loops: Animation.Infinite
-//        running: cloudItem.visible
-//    }
 }

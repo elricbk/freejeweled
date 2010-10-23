@@ -28,7 +28,7 @@ Item {
         font.family: aboutFont.name
         color: "white"
         wrapMode: Text.WordWrap
-        text: "<b>FreeJeweled</b> is a free Bejeweled2 inspired game"
+        text: "<p align=\"center\"><b>FreeJeweled</b> is a free Bejeweled2 inspired game</p>"
             + "<p align=\"center\"><b>Game Author</b></p>"
             + "<p align=\"center\">Boris Kuchin, elricbk@gmail.com</p>"
             + "<p align=\"center\"><b>Gem Images</b></p>"

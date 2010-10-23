@@ -78,7 +78,6 @@ GemCell {
             SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
 //            PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
             ScriptAction { script: behaviorPause = 0 }
-            ScriptAction { script: block.playAnimationEndSound() }
         }
     }
 

@@ -2,7 +2,6 @@
 #define GEMCELL_H
 
 #include <QDeclarativeItem>
-#include <QTimer>
 
 class GemCell : public QDeclarativeItem
 {
@@ -42,8 +41,6 @@ public:
 
     Modifier modifier() { return m_modifier; }
     void setModifier(Modifier newValue);
-
-    Q_INVOKABLE void playAnimationEndSound() {}
 
 signals:
     void behaviorEnabledChanged();
