@@ -22,7 +22,7 @@ Rectangle {
 
     FontLoader { id: gameFont; source: "fonts/mailrays.ttf" }
     FontLoader { id: buttonFont; source: "fonts/pirulen.ttf" }
-    FontLoader { id: titleFont; source: "fonts/redcircle.ttf" }
+    FontLoader { id: titleFont; source: "fonts/redcircle.TTF" }
 
     Image {
         id: background
@@ -342,7 +342,7 @@ Rectangle {
         anchors.topMargin: 30
         anchors.horizontalCenter: parent.horizontalCenter
         font.bold: true
-        font.pointSize: 40
+        font.pointSize: 36
         font.family: titleFont.name
         color: "lightgray"
 
@@ -356,61 +356,21 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    MainMenuButton {
         id: btnClassic
-        width: parent.width*0.7
-        height: parent.height*0.12
-        radius: height/2
+        caption: "CLASSIC"
         anchors.top: screen.top
         anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 40
-        smooth: true
-        border.width: 4
-        border.color: "white"
-
-        gradient: Gradient {
-            GradientStop { color: "steelblue"; position: 0.0 }
-            GradientStop { color: Qt.lighter("steelblue"); position: 0.2 }
-            GradientStop { color: "steelblue"; position: 1.0 }
-        }
-
-        Text {
-            font.family: buttonFont.name
-            font.pointSize: 20
-            text: "Classic"
-            color: "white"
-            anchors.centerIn: parent
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: screen.state = "stateGame"
-        }
+        color: "steelblue"
+        onClicked: screen.state = "stateGame"
     }
 
-    Rectangle {
+    MainMenuButton {
         id: btnEndless
-        width: parent.width*0.7
-        height: parent.height*0.12
-        radius: height/2
+        caption: "ENDLESS"
         anchors.top: btnClassic.bottom
         anchors.margins: 10
-        smooth: true
-        border.width: 4
-        border.color: "white"
-
-        gradient: Gradient {
-            GradientStop { color: "gray"; position: 0.0 }
-            GradientStop { color: Qt.lighter("gray"); position: 0.2 }
-            GradientStop { color: "gray"; position: 1.0 }
-        }
-
-        Text {
-            font.family: buttonFont.name
-            font.pointSize: 20
-            text: "Endless"
-            color: "white"
-            anchors.centerIn: parent
-        }
+        color: "gray"
     }
 
     Rectangle {

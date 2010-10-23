@@ -30,4 +30,6 @@ OTHER_FILES += \
     EndOfGameDialog.qml \
     AboutDialog.qml \
     ProgressBar.qml \
-    LoadSavedGameDialog.qml
+    LoadSavedGameDialog.qml \
+    BaseButton.qml \
+    MainMenuButton.qml
