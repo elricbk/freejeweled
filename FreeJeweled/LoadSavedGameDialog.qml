@@ -38,78 +38,36 @@ Rectangle {
         anchors { top: dlgLoadSave.top; horizontalCenter: dlgLoadSave.horizontalCenter; margins: 30 }
     }
 
-    Rectangle {
-        id: btnLoadSaved
-        width: dlgLoadSave.width - 40
-        height: 40
-        radius: height/2.3
-        color: "green"
-        anchors { horizontalCenter: dlgLoadSave.horizontalCenter; margins: 10; top: dlgTitle.bottom }
-
-        Text {
-            anchors.centerIn: parent
-            text: "Load Game"
-            font.pointSize: 14
-            font.family: buttonFont.name
-            color: "white"
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                dlgLoadSave.loadSaved();
-                forceClose();
-            }
-        }
-    }
-
-    Rectangle {
+    LoadDialogButton {
         id: btnNewGame
-        width: dlgLoadSave.width - 40
-        height: 40
-        radius: height/2.3
+        caption: "New Game"
         color: "red"
-        anchors { horizontalCenter: dlgLoadSave.horizontalCenter; margins: 10; top: btnLoadSaved.bottom }
-
-        Text {
-            anchors.centerIn: parent
-            color: "white"
-            text: "New Game"
-            font.pointSize: 14
-            font.family: buttonFont.name
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                dlgLoadSave.newGame();
-                forceClose();
-            }
+        anchors.top: dlgTitle.bottom
+        onClicked: {
+            dlgLoadSave.newGame();
+            forceClose();
         }
     }
 
-    Rectangle {
-        id: btnCancel
-        width: dlgLoadSave.width - 40
-        height: 40
-        radius: height/2.3
-        color: "gray"
-        anchors { horizontalCenter: dlgLoadSave.horizontalCenter; margins: 10; top: btnNewGame.bottom }
-
-        Text {
-            anchors.centerIn: parent
-            color: "white"
-            text: "Cancel"
-            font.pointSize: 14
-            font.family: buttonFont.name
+    LoadDialogButton {
+        id: btnLoadSaved
+        caption: "Load game"
+        color: "blue"
+        anchors.top: btnNewGame.bottom
+        onClicked: {
+            dlgLoadSave.loadSaved();
+            forceClose();
         }
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                dlgLoadSave.cancel();
-                forceClose();
-            }
+    LoadDialogButton {
+        id: btnCancel
+        color: "gray"
+        caption: "Cancel"
+        anchors.top: btnLoadSaved.bottom
+        onClicked: {
+            dlgLoadSave.cancel();
+            forceClose();
         }
     }
 }
