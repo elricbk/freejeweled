@@ -252,7 +252,7 @@ Rectangle {
         anchors.top: pbLevelProgress.bottom
         visible: opacity > 0
 
-        SimpleButton {
+        BaseButton {
             id: btnReset
             anchors.top: parent.top
             anchors.left: parent.left
@@ -263,7 +263,7 @@ Rectangle {
             onClicked: gameBoard.resetBoard()
         }
 
-        SimpleButton {
+        BaseButton {
             id: btnRemoveAll
             anchors.top: parent.top
             anchors.left: btnReset.right
@@ -274,26 +274,10 @@ Rectangle {
             onClicked: gameBoard.removeAll()
         }
 
-        SimpleButton {
-            id: btnLoadSave
-            anchors.top: parent.top
-            anchors.left: btnRemoveAll.right
-            anchors.leftMargin: 10
-            caption: "Load"
-            color: "green"
-
-            onClicked: {
-                gameBoard.loadBoardStateFromFile();
-                pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
-                pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
-            }
-
-        }
-
-        SimpleButton {
+        BaseButton {
             id: btnLevelUp
             anchors.top: parent.top
-            anchors.left: btnLoadSave.right
+            anchors.left: btnRemoveAll.right
             anchors.leftMargin: 10
             caption: "LevelUp"
             color: "gold"
@@ -302,7 +286,7 @@ Rectangle {
         }
 
         /* Second row of buttons */
-        SimpleButton {
+        BaseButton {
             id: btnLoadTest
             anchors.bottom: parent.bottom
             anchors.left: parent.left
@@ -313,7 +297,7 @@ Rectangle {
             onClicked: gameBoard.loadTestBoard()
         }
 
-        SimpleButton {
+        BaseButton {
             id: btnShowHint
             anchors.bottom: parent.bottom
             anchors.left: btnLoadTest.right
@@ -324,7 +308,7 @@ Rectangle {
             onClicked: gameBoard.showHint()
         }
 
-        SimpleButton {
+        BaseButton {
             id: btnMenu
             anchors.bottom: parent.bottom
             anchors.left: btnShowHint.right
@@ -373,60 +357,21 @@ Rectangle {
         color: "gray"
     }
 
-    Rectangle {
+    MainMenuButton {
         id: btnAction
-        width: parent.width*0.7
-        height: parent.height*0.12
-        radius: height/2
+        caption: "Action"
         anchors.top: btnEndless.bottom
         anchors.margins: 10
-        smooth: true
-        border.width: 4
-        border.color: "white"
-
-        gradient: Gradient {
-            GradientStop { color: "gray"; position: 0.0 }
-            GradientStop { color: Qt.lighter("gray"); position: 0.2 }
-            GradientStop { color: "gray"; position: 1.0 }
-        }
-
-        Text {
-            font.family: buttonFont.name
-            font.pointSize: 20
-            text: "Action"
-            color: "white"
-            anchors.centerIn: parent
-        }
+        color: "gray"
     }
 
-    Rectangle {
+    MainMenuButton {
         id: btnAbout
-        width: parent.width*0.7
-        height: parent.height*0.12
-        radius: height/2
+        caption: "about"
         anchors.top: btnAction.bottom
         anchors.margins: 10
-        smooth: true
-        border.width: 4
-        border.color: "white"
-
-        gradient: Gradient {
-            GradientStop { color: "steelblue"; position: 0.0 }
-            GradientStop { color: Qt.lighter("steelblue"); position: 0.2 }
-            GradientStop { color: "steelblue"; position: 1.0 }
-        }
-
-        Text {
-            font.family: buttonFont.name
-            font.pointSize: 20
-            text: "About"
-            color: "white"
-            anchors.centerIn: parent
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: screen.state = "stateAbout"
-        }
+        color: "steelblue"
+        onClicked: screen.state = "stateAbout"
     }
 
     states: [

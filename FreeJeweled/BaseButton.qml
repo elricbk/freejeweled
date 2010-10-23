@@ -40,15 +40,15 @@ Rectangle {
             }
 
         }
-        GradientStop {
-            position: 1.0;
-            color: {
-                if (!mouseArea.pressed)
-                    return Qt.darker(button.color);
-                else
-                    return Qt.darker(Qt.darker(button.color));
-            }
-        }
+//        GradientStop {
+//            position: 1.0;
+//            color: {
+//                if (!mouseArea.pressed)
+//                    return Qt.darker(button.color);
+//                else
+//                    return Qt.darker(Qt.darker(button.color));
+//            }
+//        }
     }
 
     Text {

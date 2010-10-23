@@ -21,7 +21,6 @@ HEADERS  += \
 FORMS    +=
 
 OTHER_FILES += \
-    SimpleButton.qml \
     Shine.qml \
     ScoreText.qml \
     MainForm.qml \
