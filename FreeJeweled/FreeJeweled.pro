@@ -12,11 +12,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     GemCell.cpp \
-    GameBoard.cpp
+    GameBoard.cpp \
+    Globals.cpp
 
 HEADERS  += \
     GemCell.h \
-    GameBoard.h
+    GameBoard.h \
+    Globals.h
 
 FORMS    +=
 

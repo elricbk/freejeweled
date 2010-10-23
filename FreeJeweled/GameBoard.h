@@ -115,6 +115,7 @@ private:
     bool hasColumnCombo(int row, int column);
     bool findCombos();
     bool findCombosInLine(int lineIndex, Direction direction);
+    void initEngine();
 
     QList<GemCell *> m_boardData;
     QList<QPair<QDateTime, QDeclarativeItem *> > m_zombieItems;
@@ -145,6 +146,7 @@ private:
     int m_usrIdx2;
 
     int m_comboCount;
+    bool m_engineInited;
 
     QTimer m_timer;
 };

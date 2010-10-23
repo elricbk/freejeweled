@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include "Globals.h"
 
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
@@ -26,19 +27,8 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
     for (int i = 0; i < m_rowCount*m_columnCount; ++i)
         m_boardData.append(NULL);
 
-    /* Creating engine and components for dynamic object creation */
-    QDeclarativeEngine *engine = new QDeclarativeEngine();
-    m_component = new QDeclarativeComponent(engine, QUrl::fromLocalFile("Block.qml"));
-    if (!m_component->isReady()) {
-        qDebug() << m_component->errors();
-        qCritical("[GameBoard] Can't fetch gem component from file");
-        return;
-    }
-    m_textComponent = new QDeclarativeComponent(engine, QUrl::fromLocalFile("ScoreText.qml"));
-    if (!m_textComponent->isReady()) {
-        qCritical("[GameBoard] Can't fetch score text component from file");
-        return;
-    }
+    /* Will create engine on demand */
+    m_engineInited = false;
 
     /* Setting initial values for level and score */
     setLevel(1);
@@ -57,7 +47,7 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
     m_gemMovedByUser = false;
     m_userInteractionAccepted = true;
     m_gameStarted = false;
-    m_gameLost = false;
+    m_gameLost = false;    
 }
 
 GameBoard::~GameBoard() {
@@ -67,6 +57,39 @@ GameBoard::~GameBoard() {
     clearBoard();
     delete m_component;
     delete m_engine;
+}
+
+
+/* Creating engine and components for dynamic object creation */
+void GameBoard::initEngine()
+{
+    if (m_engineInited)
+        return;
+
+    QDeclarativeEngine *engine;
+    if (g_mainEngine != NULL) {
+        engine = g_mainEngine;
+    } else {
+        engine = new QDeclarativeEngine();
+        qDebug() << "[initEngine] Can't use global engine";
+    }
+
+    /* Gem cell component */
+    m_component = new QDeclarativeComponent(engine, QUrl::fromLocalFile("Block.qml"));
+    if (!m_component->isReady()) {
+        qDebug() << m_component->errors();
+        qCritical("[GameBoard] Can't fetch gem component from file");
+        return;
+    }
+
+    /* Score text component */
+    m_textComponent = new QDeclarativeComponent(engine, QUrl::fromLocalFile("ScoreText.qml"));
+    if (!m_textComponent->isReady()) {
+        qCritical("[GameBoard] Can't fetch score text component from file");
+        return;
+    }
+
+    m_engineInited = true;
 }
 
 void GameBoard::setCell(int row, int column, GemCell *value)
@@ -260,6 +283,9 @@ int GameBoard::index(int row, int column)
 /* Function to create block. Automatically adds it to the game board. */
 GemCell * GameBoard::createBlock(int row, int column, int startRow)
 {
+    if (!m_engineInited)
+        initEngine();
+
     Q_ASSERT(m_component != NULL);
     Q_ASSERT(scene() != NULL);
     if (!cellInBoard(row, column))
@@ -968,6 +994,9 @@ void GameBoard::showFloatingScores()
 direction of combo and total count of gems in combo */
 void GameBoard::addScoreItem(int row, int column, int gemType, Direction dir, int cnt)
 {
+    if (!m_engineInited)
+        initEngine();
+
     m_comboCount++;
 
     /* Adding floating score to show */

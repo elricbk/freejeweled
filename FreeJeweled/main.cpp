@@ -2,6 +2,7 @@
 #include <QDeclarativeView>
 #include "GemCell.h"
 #include "GameBoard.h"
+#include "Globals.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<GameBoard>("com.mycompany.gemcell", 1, 0, "GameBoard");
 
     QDeclarativeView view;
+    g_mainEngine = view.engine();
     view.setSource(QUrl::fromLocalFile("MainForm.qml"));
     view.setMinimumSize(320, 480);
     view.setMaximumSize(320, 480);
