@@ -5,26 +5,6 @@
 #include <QFile>
 #include <QTextStream>
 
-/*
-"12121212"
-"21212121"
-"12121212"
-"21212121"
-"12121212"
-"21212121"
-"12121212"
-"21212121"
-*/
-
-char const * const TestBoard = "45454545"
-                               "21212121"
-                               "45454545"
-                               "21212121"
-                               "45454545"
-                               "21212121"
-                               "45454545"
-                               "21232121";
-
 const int CELL_SIZE = 40;
 const int DEFAULT_ROW_COUNT = 8;
 const int DEFAULT_COLUMN_COUNT = 8;
