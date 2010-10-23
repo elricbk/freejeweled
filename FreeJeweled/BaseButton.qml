@@ -12,9 +12,9 @@ Rectangle {
 
     property alias caption: buttonLabel.text
     property alias textColor: buttonLabel.color
-    property color borderColor: "white"
-    property int borderWidth: 1
-    property int fontSize: 10
+    property color borderColor: "transparent"
+    property int borderWidth: 0
+    property int fontSize: 12
     signal clicked
 
     border { width: borderWidth; color: borderColor }
@@ -24,6 +24,15 @@ Rectangle {
             position: 0.0;
             color: {
                 if (!mouseArea.pressed)
+                    return button.color;
+                else
+                    return Qt.darker(button.color);
+            }
+        }
+        GradientStop {
+            position: 0.2;
+            color: {
+                if (!mouseArea.pressed)
                     return Qt.lighter(button.color);
                 else
                     return button.color;
@@ -31,24 +40,14 @@ Rectangle {
 
         }
         GradientStop {
-            position: 0.5;
+            position: 1.0;
             color: {
                 if (!mouseArea.pressed)
                     return button.color;
                 else
                     return Qt.darker(button.color);
             }
-
         }
-//        GradientStop {
-//            position: 1.0;
-//            color: {
-//                if (!mouseArea.pressed)
-//                    return Qt.darker(button.color);
-//                else
-//                    return Qt.darker(Qt.darker(button.color));
-//            }
-//        }
     }
 
     Text {

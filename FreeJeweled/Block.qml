@@ -1,7 +1,6 @@
 import Qt 4.7
 import Qt.labs.particles 1.0
 import com.mycompany.gemcell 1.0
-//import "qml"
 
 GemCell {
     id: block
@@ -12,8 +11,6 @@ GemCell {
     property bool explodeDying: false
     property bool explodable: false
     property bool selected: false
-
-    property bool deathAnimationFinished: false
     property int behaviorPause: 0
 
 

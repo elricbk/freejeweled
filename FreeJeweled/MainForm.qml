@@ -252,67 +252,61 @@ Rectangle {
         anchors.top: pbLevelProgress.bottom
         visible: opacity > 0
 
-        BaseButton {
+        InGameButton {
             id: btnReset
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.leftMargin: 10
             color: "red"
             caption: "Reset"
 
             onClicked: gameBoard.resetBoard()
         }
 
-        BaseButton {
+        InGameButton {
             id: btnRemoveAll
             anchors.top: parent.top
             anchors.left: btnReset.right
-            anchors.leftMargin: 10
             caption: "Run"
             color: "steelblue"
 
             onClicked: gameBoard.removeAll()
         }
 
-        BaseButton {
+        InGameButton {
             id: btnLevelUp
             anchors.top: parent.top
             anchors.left: btnRemoveAll.right
-            anchors.leftMargin: 10
             caption: "LevelUp"
-            color: "gold"
+            color: "blue"
 
             onClicked: gameBoard.score = gameBoard.levelCap(gameBoard.level)
         }
 
         /* Second row of buttons */
-        BaseButton {
+        InGameButton {
             id: btnLoadTest
             anchors.bottom: parent.bottom
             anchors.left: parent.left
-            anchors.leftMargin: 10
             caption: "Test"
             color: "royalblue"
 
             onClicked: gameBoard.loadTestBoard()
         }
 
-        BaseButton {
+        InGameButton {
             id: btnShowHint
             anchors.bottom: parent.bottom
             anchors.left: btnLoadTest.right
-            anchors.leftMargin: 10
             caption: "Hint"
             color: "green"
 
             onClicked: gameBoard.showHint()
         }
 
-        BaseButton {
+        InGameButton {
             id: btnMenu
             anchors.bottom: parent.bottom
             anchors.left: btnShowHint.right
-            anchors.leftMargin: 10
             caption: "Menu"
             color: "red"
 

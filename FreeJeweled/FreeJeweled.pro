@@ -32,4 +32,5 @@ OTHER_FILES += \
     LoadSavedGameDialog.qml \
     BaseButton.qml \
     MainMenuButton.qml \
-    LoadDialogButton.qml
+    LoadDialogButton.qml \
+    InGameButton.qml
