@@ -481,19 +481,17 @@ void GameBoard::removeAll() {
 
 void GameBoard::loadTestBoard()
 {
-    loadTestBoard(QString(TestBoard));
-}
-
-void GameBoard::loadTestBoard(QString boardData)
-{
-    resetBoard();
-
-    int i = 0;
-    while ((i < boardData.length()) && (i < m_boardData.count())) {
-        if (boardData[i] != '\n') {
-            m_boardData[i]->setProperty("type", QString(boardData[i]).toInt());
-        }
-        ++i;
+    QFile inFile("test.board");
+    if (inFile.open(QFile::ReadOnly)) {
+        QTextStream inStream(&inFile);
+        QString strBoard, strBoardLine;
+        do {
+            strBoardLine = inStream.readLine();
+            strBoard += strBoardLine;
+        } while (!strBoardLine.isNull());
+        fromString(strBoard);
+    } else {
+        qDebug() << "[loadTestBoard] Can't open test file";
     }
 }
 

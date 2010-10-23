@@ -33,4 +33,5 @@ OTHER_FILES += \
     BaseButton.qml \
     MainMenuButton.qml \
     LoadDialogButton.qml \
-    InGameButton.qml
+    InGameButton.qml \
+    test.board

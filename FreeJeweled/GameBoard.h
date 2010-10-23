@@ -53,7 +53,6 @@ public:
     Q_INVOKABLE void shuffleDown();
     Q_INVOKABLE void fillBoard();
     Q_INVOKABLE void removeAll();
-    Q_INVOKABLE void loadTestBoard(QString boardData);
     Q_INVOKABLE void loadTestBoard();
     Q_INVOKABLE void handleClick(int x, int y);
     Q_INVOKABLE void dbgPrintGemPositions();
