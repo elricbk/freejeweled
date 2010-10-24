@@ -62,6 +62,9 @@ public:
     Q_INVOKABLE void showHint();
     Q_INVOKABLE bool hasSave();
 
+public slots:
+    Q_INVOKABLE void dropGemsDown();
+
 signals:
     void levelChanged();
     void scoreChanged();
@@ -73,7 +76,6 @@ signals:
 
 private slots:
     void checkGemPositions();
-    void dropGemsDown();
 
 private:
     enum Direction {

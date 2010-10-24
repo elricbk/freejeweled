@@ -129,21 +129,37 @@ Rectangle {
             }
         }
 
-        onLevelUp: {
-            msgText.text = "LEVEL UP!"
-            msgText.font.pointSize = 38
-            msgText.runAnimation();
-            pbLevelProgress.minimum = gameBoard.score;
-            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level)
-            background.source = getBackgroundSource();
-            gameBoard.resetBoard();
-        }
+        onLevelUp: levelUpAnimation.start()
 
         onNoMoreMoves: {
             msgText.text = "NO MORE MOVES";
             msgText.font.pointSize = 30;
             msgText.runAnimation();
             dlgEndGame.show("Your result\nLevel: " + gameBoard.level + "\nScore: " + gameBoard.score);
+        }
+    }
+
+    SequentialAnimation {
+        id: levelUpAnimation
+        ScriptAction {
+            script: {
+                msgText.text = "LEVEL UP!";
+                msgText.font.pointSize = 38;
+                msgText.runAnimation();
+                gameBoard.dropGemsDown();
+            }
+        }
+        PauseAnimation { duration: 3000 }
+        ScriptAction {
+            script: {
+                msgText.text = "LEVEL " + gameBoard.level;
+                msgText.font.pointSize = 38;
+                msgText.runAnimation();
+                pbLevelProgress.minimum = gameBoard.score;
+                pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level)
+                background.source = getBackgroundSource();
+                gameBoard.resetBoard();
+            }
         }
     }
 
