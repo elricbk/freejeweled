@@ -13,7 +13,7 @@ Text {
     z: 5
     opacity: 0
 
-    function runAnimation() {
+    function show() {
         msgTextAnimation.start();
     }
 

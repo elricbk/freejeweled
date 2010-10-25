@@ -140,7 +140,7 @@ Rectangle {
         onNoMoreMoves: {
             msgText.text = "NO MORE MOVES";
             msgText.font.pointSize = 30;
-            msgText.runAnimation();
+            msgText.show();
             dlgEndGame.show("Your result\nLevel: " + gameBoard.level + "\nScore: " + gameBoard.score);
         }
     }
@@ -151,7 +151,7 @@ Rectangle {
             script: {
                 msgText.text = "LEVEL UP!";
                 msgText.font.pointSize = 38;
-                msgText.runAnimation();
+                msgText.show();
                 gameBoard.dropGemsDown();
             }
         }
@@ -160,7 +160,7 @@ Rectangle {
             script: {
                 msgText.text = "LEVEL " + gameBoard.level;
                 msgText.font.pointSize = 38;
-                msgText.runAnimation();
+                msgText.show();
                 pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
                 pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
                 setBackgroundSource();
@@ -183,8 +183,8 @@ Rectangle {
         onCancel: screen.state = "stateMainMenu"
         onLoadSaved: {
             gameBoard.loadBoardStateFromFile();
-            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
             pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
+            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
         }
         onNewGame: gameBoard.newGame();
     }
@@ -301,7 +301,10 @@ Rectangle {
             caption: "LevelUp"
             color: "blue"
 
-            onClicked: gameBoard.score = gameBoard.levelCap(gameBoard.level)
+            onClicked: {
+                gameBoard.score = gameBoard.levelCap(gameBoard.level);
+                gameBoard.removeAll();
+            }
         }
 
         /* Second row of buttons */
