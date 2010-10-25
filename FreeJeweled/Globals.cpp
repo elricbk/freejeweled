@@ -1,3 +1,3 @@
-#include <Globals.h>
+#include "Globals.h"
 
 QDeclarativeEngine *g_mainEngine = NULL;
