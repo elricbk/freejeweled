@@ -161,8 +161,8 @@ Rectangle {
                 msgText.text = "LEVEL " + gameBoard.level;
                 msgText.font.pointSize = 38;
                 msgText.runAnimation();
-                pbLevelProgress.minimum = gameBoard.score;
-                pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level)
+                pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
+                pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
                 setBackgroundSource();
                 gameBoard.resetBoard();
             }

@@ -478,6 +478,11 @@ void GameBoard::removeAll() {
             emit noMoreMoves();
             m_gameLost = true;
             QTimer::singleShot(800, this, SLOT(dropGemsDown()));
+        } else {
+            if (score() >= m_currentLevelCap) {
+                setLevel(level() + 1);
+                emit levelUp();
+            }
         }
         m_userInteractionAccepted = true;
     }
@@ -545,10 +550,6 @@ void GameBoard::setScore(int score)
     if (m_score != score) {
         m_score = score;
         emit scoreChanged();
-        if (score >= m_currentLevelCap) {
-            setLevel(level() + 1);
-            emit levelUp();
-        }
     }
 }
 
