@@ -109,7 +109,7 @@ void GameBoard::resetBoard()
 
     for (int i = 0; i < m_rowCount; ++i) {
         for (int j = 0; j < m_columnCount; ++j) {
-            GemCell *block = createBlock(i, j);
+            GemCell *block = createBlock(i, j, i - m_rowCount);
             Q_ASSERT(block != NULL);
 
             /* Initial variables for combo in cell and combo in row */
