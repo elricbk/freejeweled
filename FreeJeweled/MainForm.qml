@@ -1,5 +1,4 @@
 import Qt 4.7
-//import "qml"
 import com.mycompany.gemcell 1.0
 
 Rectangle {
@@ -10,7 +9,15 @@ Rectangle {
     state: "stateMainMenu"
     z: -10
 
-    function getBackgroundSource() {
+    function setBackgroundSource() {
+        var source = generateBackgroundFileName();
+        while (source == background.source) {
+            source = generateBackgroundFileName();
+        }
+        background.source = source;
+    }
+
+    function generateBackgroundFileName() {
         var bgrStr = Math.floor(Math.random()*20 + 1).toString();
         if (bgrStr.length == 1) {
             bgrStr = "0" + bgrStr;
@@ -22,12 +29,11 @@ Rectangle {
 
     FontLoader { id: gameFont; source: "fonts/mailrays.ttf" }
     FontLoader { id: buttonFont; source: "fonts/pirulen.ttf" }
-    FontLoader { id: titleFont; source: "fonts/redcircle.TTF" }
+    FontLoader { id: titleFont; source: "fonts/redcircle.ttf" }
 
     Image {
         id: background
         anchors.fill: parent
-        source: getBackgroundSource()
         fillMode: Image.PreserveAspectCrop
     }
 
@@ -157,7 +163,7 @@ Rectangle {
                 msgText.runAnimation();
                 pbLevelProgress.minimum = gameBoard.score;
                 pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level)
-                background.source = getBackgroundSource();
+                setBackgroundSource();
                 gameBoard.resetBoard();
             }
         }
@@ -180,7 +186,7 @@ Rectangle {
             pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
             pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
         }
-        onNewGame: gameBoard.newGame()
+        onNewGame: gameBoard.newGame();
     }
 
     ProgressBar {
@@ -447,10 +453,8 @@ Rectangle {
 
                 ScriptAction {
                     script: {
+                        setBackgroundSource();
                         if (gameBoard.hasSave()) {
-//                            gameBoard.loadBoardStateFromFile();
-//                            pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
-//                            pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
                             dlgLoadSave.show();
                         } else {
                             gameBoard.newGame();
