@@ -1,12 +1,14 @@
 #include "GameBoard.h"
 #include <math.h>
 #include <QDeclarativeEngine>
+#include <QDeclarativeContext>
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
 #include "Globals.h"
 
-const int CELL_SIZE = 40;
+const int SMALL_CELL_SIZE = 40;
+const int BIG_CELL_SIZE = 80;
 const int DEFAULT_ROW_COUNT = 8;
 const int DEFAULT_COLUMN_COUNT = 8;
 
@@ -47,7 +49,8 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
     m_gemMovedByUser = false;
     m_userInteractionAccepted = true;
     m_gameStarted = false;
-    m_gameLost = false;    
+    m_gameLost = false;
+    m_cellSize = BIG_CELL_SIZE;
 }
 
 GameBoard::~GameBoard() {
@@ -73,6 +76,8 @@ void GameBoard::initEngine()
         engine = new QDeclarativeEngine();
         qDebug() << "[initEngine] Can't use global engine";
     }
+
+    engine->rootContext()->setContextProperty("g_scaleFactor", cellSize()*1.0/40);
 
     /* Gem cell component */
     m_component = new QDeclarativeComponent(engine, QUrl::fromLocalFile("Block.qml"));
@@ -295,12 +300,12 @@ GemCell * GameBoard::createBlock(int row, int column, int startRow)
     this->scene()->addItem(curCell);
     curCell->setParentItem(this);
     curCell->setProperty("type", generateCellType());
-    curCell->setWidth(CELL_SIZE);
-    curCell->setHeight(CELL_SIZE);
-    curCell->setY(startRow*CELL_SIZE);
+    curCell->setWidth(cellSize());
+    curCell->setHeight(cellSize());
+    curCell->setY(startRow*cellSize());
     curCell->setProperty("behaviorPause", abs(startRow)*50 + m_currentStepDelay);
-    curCell->setProperty("x", column*CELL_SIZE);
-    curCell->setProperty("y", row*CELL_SIZE);
+    curCell->setProperty("x", column*cellSize());
+    curCell->setProperty("y", row*cellSize());
     curCell->setProperty("spawned", true);
     curCell->setModifier(GemCell::Normal);
     m_boardData[index(row, column)] = curCell;
@@ -407,7 +412,7 @@ void GameBoard::shuffleDown()
                    GemCell* obj = board(row, column);
                    int curPause = obj->property("behaviorPause").toInt();
                    obj->setProperty("behaviorPause", curPause + m_currentStepDelay);
-                   obj->setProperty("y", (row + fallDist) * CELL_SIZE);
+                   obj->setProperty("y", (row + fallDist) * cellSize());
                    m_boardData[index(row + fallDist, column)] = obj;
                    m_boardData[index(row, column)] = NULL;
                 }
@@ -516,8 +521,8 @@ void GameBoard::checkGemPositions()
             int column = i % m_columnCount;
             /* Checking for not the exact place but rather near of it. Because of spring animation
             could take a long time to stop */
-            bool inPlace = (abs(m_boardData[i]->x() - column*CELL_SIZE)
-                + abs(m_boardData[i]->y() - row*CELL_SIZE) < 3);
+            bool inPlace = (abs(m_boardData[i]->x() - column*cellSize())
+                + abs(m_boardData[i]->y() - row*cellSize()) < 3);
             if (!inPlace) {
                 result = false;
                 break;
@@ -560,8 +565,8 @@ int GameBoard::levelFromScore()
 
 void GameBoard::handleClick(int x, int y)
 {
-    int row = y / CELL_SIZE;
-    int column = x / CELL_SIZE;
+    int row = y / cellSize();
+    int column = x / cellSize();
 
 
     if (!cellInBoard(row, column))
@@ -952,14 +957,14 @@ void GameBoard::switchGems(int idx1, int idx2)
     middle of some animation */
     /* Switching on the screen if necessary */
     if (column1 != column2) {
-        firstGemCell->setProperty("x", column2*CELL_SIZE);
-        secondGemCell->setProperty("x", column1*CELL_SIZE);
+        firstGemCell->setProperty("x", column2*cellSize());
+        secondGemCell->setProperty("x", column1*cellSize());
     }
 
     /* Switching on the screen if necessary */
     if (row1 != row2) {
-        firstGemCell->setProperty("y", row2*CELL_SIZE);
-        secondGemCell->setProperty("y", row1*CELL_SIZE);
+        firstGemCell->setProperty("y", row2*cellSize());
+        secondGemCell->setProperty("y", row1*cellSize());
     }
 }
 
@@ -1007,11 +1012,11 @@ void GameBoard::addScoreItem(int row, int column, int gemType, Direction dir, in
     /* Here we set coordinates of score text item. They should be one row higher than combo row to
     make them easily distinguishable */
     if (dir == Row) {
-        item->setX( (column - ceil(cnt*1.0/2))*CELL_SIZE );
-        item->setY( (row - 1)*CELL_SIZE );
+        item->setX( (column - ceil(cnt*1.0/2))*cellSize() );
+        item->setY( (row - 1)*cellSize() );
     } else {
-        item->setX(column*CELL_SIZE);
-        item->setY( (row - cnt - 1)*CELL_SIZE );
+        item->setX(column*cellSize());
+        item->setY( (row - cnt - 1)*cellSize() );
     }
 
     item->setProperty("type", gemType);
@@ -1045,8 +1050,8 @@ void GameBoard::addHyperCubeScoreItem(int row, int column, int gemType)
 
     /* Here we set coordinates of score text item. They should be one row higher than combo row to
     make them easily distinguishable */
-    item->setX( column*CELL_SIZE );
-    item->setY( (row - 1)*CELL_SIZE );
+    item->setX( column*cellSize() );
+    item->setY( (row - 1)*cellSize() );
     item->setProperty("type", gemType);
     item->setProperty("scoreValue", HYPER_CUBE_MULTIPLYER*5*(level() + 1));
     m_scoreToShow.append(item);
@@ -1301,8 +1306,8 @@ void GameBoard::showHint()
 {
     int hintIdx;
     if (hasPossibleCombos(&hintIdx)) {
-        setProperty("hintX", hintIdx % 8 * CELL_SIZE);
-        setProperty("hintY", hintIdx / 8 * CELL_SIZE);
+        setProperty("hintX", hintIdx % 8 * cellSize());
+        setProperty("hintY", hintIdx / 8 * cellSize());
         setProperty("hintVisible", true);
     }
 }
@@ -1407,7 +1412,7 @@ void GameBoard::dropGemsDown()
             if (board(row, column) != NULL) {
                 pause += rand() % 100;
                 board(row, column)->setProperty("behaviorPause", pause);
-                board(row, column)->setProperty("y", (row + m_rowCount + 1)*CELL_SIZE);
+                board(row, column)->setProperty("y", (row + m_rowCount + 1)*cellSize());
                 m_zombieItems.append(qMakePair(now, (QDeclarativeItem *)board(row, column)));
                 setCell(row, column, NULL);
             }
@@ -1429,4 +1434,13 @@ void GameBoard::newGame()
 bool GameBoard::hasSave()
 {
     return QFile::exists("save.board");
+}
+
+/* Setter method for "cellSize" property */
+void GameBoard::setCellSize(int newValue)
+{
+    if (newValue != m_cellSize) {
+        m_cellSize = newValue;
+        emit cellSizeChanged();
+    }
 }

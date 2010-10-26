@@ -13,18 +13,18 @@ Item {
 
     Text {
         id: dlgTitle
-        anchors { horizontalCenter: dlgAbout.horizontalCenter; top: dlgAbout.top; margins: 10 }
+        anchors { horizontalCenter: dlgAbout.horizontalCenter; top: dlgAbout.top; margins: 10*gameBoard.cellSize/40 }
         text: "About"
         color: "white"
         font.bold: true
-        font.pointSize: 36
+        font.pointSize: 36*gameBoard.cellSize/40
         font.family: aboutFont.name
     }
 
     Text {
-        anchors { horizontalCenter: dlgAbout.horizontalCenter; margins: 5; top: dlgTitle.bottom }
+        anchors { horizontalCenter: dlgAbout.horizontalCenter; margins: 5*gameBoard.cellSize/40; top: dlgTitle.bottom }
         width: dlgAbout.width - 2*anchors.margins
-        font.pointSize: 16
+        font.pointSize: 16*gameBoard.cellSize/40
         font.family: aboutFont.name
         color: "white"
         wrapMode: Text.WordWrap

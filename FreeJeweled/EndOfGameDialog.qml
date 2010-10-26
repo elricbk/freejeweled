@@ -37,7 +37,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 5;
         font.bold: true;
-        font.pointSize: 20
+        font.pointSize: 20*gameBoard.cellSize/40
         font.family: buttonFont.name
         color: "white"
         text: "Your result"
@@ -48,8 +48,8 @@ Rectangle {
         color: "white"
         text: "Level"
         anchors.top: titleText.bottom
-        anchors.margins: 20
-        font.pointSize: 16
+        anchors.margins: 20*gameBoard.cellSize/40
+        font.pointSize: 16*gameBoard.cellSize/40
         font.family: buttonFont.name
     }
 
@@ -58,8 +58,8 @@ Rectangle {
         color: "white"
         text: "Score"
         anchors.top: lblLevel.bottom
-        anchors.margins: 20
-        font.pointSize: 16
+        anchors.margins: 20*gameBoard.cellSize/40
+        font.pointSize: 16*gameBoard.cellSize/40
         font.family: buttonFont.name
     }
 
@@ -68,8 +68,8 @@ Rectangle {
         color: "white"
         text: gameBoard.level
         anchors.top: titleText.bottom
-        anchors.margins: 20
-        font.pointSize: 16
+        anchors.margins: 20*gameBoard.cellSize/40
+        font.pointSize: 16*gameBoard.cellSize/40
         font.family: buttonFont.name
     }
 
@@ -78,8 +78,8 @@ Rectangle {
         color: "white"
         text: gameBoard.score
         anchors.top: valueLevel.bottom
-        anchors.margins: 20
-        font.pointSize: 16
+        anchors.margins: 20*gameBoard.cellSize/40
+        font.pointSize: 16*gameBoard.cellSize/40
         font.family: buttonFont.name
     }
 

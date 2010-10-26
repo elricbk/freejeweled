@@ -4,8 +4,8 @@ import com.mycompany.gemcell 1.0
 Rectangle {
     id: screen
 
-    width: 320
-    height: 480
+    width: 8*gameBoard.cellSize
+    height: 12*gameBoard.cellSize
     state: "stateMainMenu"
     z: -10
 
@@ -62,7 +62,7 @@ Rectangle {
         color: "white"
         opacity: 0.5
         anchors.top: scoreBox.bottom
-        height: 5
+        height: 5*gameBoard.cellSize/40
         width: parent.width
     }
 
@@ -72,14 +72,14 @@ Rectangle {
         color: "white"
         opacity: 0.5
         anchors.top: gameBoard.bottom
-        height: 5
+        height: 5*gameBoard.cellSize/40
         width: parent.width
     }
 
     GameBoard {
         id: gameBoard
-        width: 320
-        height: 320
+        width: 8*gameBoard.cellSize
+        height: 8*gameBoard.cellSize
         anchors.top: topGameBoardBorder.bottom
         visible: opacity > 0
         opacity: 0
@@ -99,8 +99,8 @@ Rectangle {
 
         Item {
             id: selectionRect
-            width: 40
-            height: 40
+            width: gameBoard.cellSize
+            height: gameBoard.cellSize
             visible: gameBoard.gemSelected
             x: gameBoard.selGemColumn*width
             y: gameBoard.selGemRow*width
@@ -139,7 +139,7 @@ Rectangle {
 
         onNoMoreMoves: {
             msgText.text = "NO MORE MOVES";
-            msgText.font.pointSize = 30;
+            msgText.font.pointSize = 30*gameBoard.cellSize/40;
             msgText.show();
             dlgEndGame.show("Your result\nLevel: " + gameBoard.level + "\nScore: " + gameBoard.score);
         }
@@ -150,7 +150,7 @@ Rectangle {
         ScriptAction {
             script: {
                 msgText.text = "LEVEL UP!";
-                msgText.font.pointSize = 38;
+                msgText.font.pointSize = 38*gameBoard.cellSize/40;
                 msgText.show();
                 gameBoard.dropGemsDown();
             }
@@ -159,7 +159,7 @@ Rectangle {
         ScriptAction {
             script: {
                 msgText.text = "LEVEL " + gameBoard.level;
-                msgText.font.pointSize = 38;
+                msgText.font.pointSize = 38*gameBoard.cellSize/40;
                 msgText.show();
                 pbLevelProgress.minimum = gameBoard.levelCap(gameBoard.level - 1);
                 pbLevelProgress.maximum = gameBoard.levelCap(gameBoard.level);
@@ -196,7 +196,7 @@ Rectangle {
         anchors.top: bottomGameBoardBorder.bottom
         color: "white"
         secondColor: "green"
-        height: 20
+        height: 20*gameBoard.cellSize/40
         maximum: gameBoard.levelCap(gameBoard.level)
         value: gameBoard.score
     }
@@ -205,7 +205,7 @@ Rectangle {
         id: scoreBox
 
         width: parent.width
-        height: 60 /* cellSize*1.5, actually */
+        height: 60*gameBoard.cellSize/40 /* cellSize*1.5, actually */
         state: "stateHidden"
 
         anchors.top: parent.top
@@ -214,24 +214,24 @@ Rectangle {
             id: txtScore
             color: "white"
             font.family: gameFont.name
-            font.pointSize: 16
+            font.pointSize: 16*gameBoard.cellSize/40
             font.bold: true
             text: gameBoard.score
             anchors.bottom: parent.bottom
-            anchors.leftMargin: 10
-            anchors.bottomMargin: 5
+            anchors.leftMargin: 10*gameBoard.cellSize/40
+            anchors.bottomMargin: 5*gameBoard.cellSize/40
         }
 
         Text {
             id: txtLevel
             color: "white"
             font.family: gameFont.name
-            font.pointSize: 16
+            font.pointSize: 16*gameBoard.cellSize/40
             font.bold: true
             text: "Level " + gameBoard.level + " "
             anchors.bottom: parent.bottom
-            anchors.rightMargin: 10
-            anchors.bottomMargin: 5
+            anchors.rightMargin: 10*gameBoard.cellSize/40
+            anchors.bottomMargin: 5*gameBoard.cellSize/40
         }
 
         states: [
@@ -342,20 +342,20 @@ Rectangle {
     Text {
         id: gameTitle
         text: "<p align=\"center\">Free<br>Jeweled</p>"
-        anchors.topMargin: 30
+        anchors.topMargin: 30*gameBoard.cellSize/40
         anchors.horizontalCenter: parent.horizontalCenter
         font.bold: true
-        font.pointSize: 36
+        font.pointSize: 36*gameBoard.cellSize/40
         font.family: titleFont.name
         color: "lightgray"
 
         Image {
             anchors.centerIn: parent
-            width: 50
-            height: 50
+            width: 50*gameBoard.cellSize/40
+            height: 50*gameBoard.cellSize/40
             visible: gameTitle.y > 0
             source: "pics/big/blueGem.title.png"
-            Shine { anchors { leftMargin: 10; topMargin: 10 } }
+            Shine { anchors { leftMargin: 10*gameBoard.cellSize/40; topMargin: 10*gameBoard.cellSize/40 } }
         }
     }
 
@@ -363,7 +363,7 @@ Rectangle {
         id: btnClassic
         caption: "CLASSIC"
         anchors.top: screen.top
-        anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 40
+        anchors.margins: gameTitle.height + gameTitle.anchors.topMargin + 40*gameBoard.cellSize/40
         color: "steelblue"
         onClicked: screen.state = "stateGame"
     }
@@ -372,7 +372,7 @@ Rectangle {
         id: btnEndless
         caption: "ENDLESS"
         anchors.top: btnClassic.bottom
-        anchors.margins: 10
+        anchors.margins: 10*gameBoard.cellSize/40
         color: "gray"
     }
 
@@ -380,7 +380,7 @@ Rectangle {
         id: btnAction
         caption: "Action"
         anchors.top: btnEndless.bottom
-        anchors.margins: 10
+        anchors.margins: 10*gameBoard.cellSize/40
         color: "gray"
     }
 
@@ -388,7 +388,7 @@ Rectangle {
         id: btnAbout
         caption: "about"
         anchors.top: btnAction.bottom
-        anchors.margins: 10
+        anchors.margins: 10*gameBoard.cellSize/40
         color: "steelblue"
         onClicked: screen.state = "stateAbout"
     }

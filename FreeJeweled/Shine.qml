@@ -2,8 +2,8 @@ import Qt 4.7
 
 Item {
     id: shineItem
-    width: /*gameCanvas.blockSize*/ 30
-    height: /*gameCanvas.blockSize*/ 30
+    width: /*gameCanvas.blockSize*/ 30*g_scaleFactor
+    height: /*gameCanvas.blockSize*/ 30*g_scaleFactor
     z: 5
     property int animationDuration: 9000
 

@@ -5,8 +5,8 @@ import Qt 4.7
 Rectangle {
     id: button
     color: "white"
-    width: buttonLabel.width + 20
-    height: buttonLabel.height + 5
+    width: buttonLabel.width + 20*gameBoard.cellSize/40
+    height: buttonLabel.height + 5*gameBoard.cellSize/40
     radius: button.height/2.1
     smooth: true
 

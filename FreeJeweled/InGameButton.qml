@@ -2,6 +2,6 @@
 import Qt 4.7
 
 BaseButton {
-    anchors.margins: 5
-    fontSize: 12
+    anchors.margins: 5*gameBoard.cellSize/40
+    fontSize: 12*gameBoard.cellSize/40
 }

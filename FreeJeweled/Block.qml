@@ -23,26 +23,33 @@ GemCell {
             return 1;
     }
 
+    function picsDir() {
+        if (g_scaleFactor > 1)
+            return "pics/big/";
+        else
+            return "pics/gems/";
+    }
+
     Image {
         id: img
         anchors.fill: parent
         source: {
             if (modifier == GemCell.HyperCube) {
-                return "pics/gems/hyperCube.resized.png";
+                return (picsDir() + "hyperCube.resized.png");
             } else if (type == 1)
-                return "pics/gems/redGem.resized.png";
+                return (picsDir() + "redGem.resized.png");
             else if (type == 2)
-                return "pics/gems/blueGem.resized.png";
+                return (picsDir() + "blueGem.resized.png");
             else if (type == 3)
-                return "pics/gems/greenGem.resized.png";
+                return (picsDir() + "greenGem.resized.png");
             else if (type == 4)
-                return "pics/gems/purpleGem.resized.png";
+                return (picsDir() + "purpleGem.resized.png");
             else if (type == 5)
-                return "pics/gems/whiteGem.resized.png";
+                return (picsDir() + "whiteGem.resized.png");
             else if (type == 6)
-                return "pics/gems/orangeGem.resized.png";
+                return (picsDir() + "orangeGem.resized.png");
             else if (type == 0)
-                return "pics/gems/yellowGem.resized.png";
+                return (picsDir() + "yellowGem.resized.png");
         }
         opacity: 1
 		

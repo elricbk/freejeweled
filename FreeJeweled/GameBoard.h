@@ -18,6 +18,7 @@ class GameBoard: public QDeclarativeItem
     Q_PROPERTY(int selGemColumn READ selGemColumn WRITE setSelGemColumn NOTIFY selGemColumnChanged)
     Q_PROPERTY(bool gemSelected READ gemSelected WRITE setGemSelected NOTIFY gemSelectedChanged)
     Q_PROPERTY(bool gameLost READ gameLost)
+    Q_PROPERTY(int cellSize READ cellSize WRITE setCellSize NOTIFY cellSizeChanged)
 public:
     GameBoard(QDeclarativeItem *parent = NULL);
     ~GameBoard();
@@ -42,6 +43,9 @@ public:
 
     int gemSelected() { return m_gemSelected; }
     void setGemSelected(bool newValue);
+
+    int cellSize() { return m_cellSize; }
+    void setCellSize(int newValue);
 
     bool gameLost() { return m_gameLost; }
 
@@ -71,6 +75,7 @@ signals:
     void selGemRowChanged();
     void selGemColumnChanged();
     void gemSelectedChanged();
+    void cellSizeChanged();
     void levelUp();
     void noMoreMoves();
 
@@ -143,6 +148,7 @@ private:
     bool m_userInteractionAccepted;
     bool m_gameStarted;
     bool m_gameLost;
+    int m_cellSize;
 
     int m_usrIdx1;
     int m_usrIdx2;
