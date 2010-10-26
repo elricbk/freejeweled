@@ -1008,6 +1008,8 @@ void GameBoard::addScoreItem(int row, int column, int gemType, Direction dir, in
     /* Adding floating score to show */
     QDeclarativeItem *item = qobject_cast<QDeclarativeItem *>(m_textComponent->create());
     item->setParentItem(this);
+    item->setWidth(cellSize());
+    item->setHeight(cellSize());
 
     /* Here we set coordinates of score text item. They should be one row higher than combo row to
     make them easily distinguishable */

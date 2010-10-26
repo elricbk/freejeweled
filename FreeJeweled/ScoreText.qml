@@ -2,13 +2,10 @@ import Qt 4.7
 
 Item {
     id: scoreItem
-
-    width: 40
-    height: 40
     opacity: 0
 
     property int type: 1
-    property int shiftValue: 80
+    property int shiftValue: 80*g_scaleFactor
     property int scoreValue: 0
     property bool animationStarted: false
 
@@ -18,7 +15,7 @@ Item {
         anchors.centerIn: scoreItem
         text: scoreItem.scoreValue
         font.bold: true
-        font.pointSize: 16
+        font.pointSize: 16*g_scaleFactor
 
         color: {
             if (scoreItem.type == 1)
