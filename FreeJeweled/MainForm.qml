@@ -6,6 +6,7 @@ Rectangle {
 
     width: 8*gameBoard.cellSize
     height: 12*gameBoard.cellSize
+    property double g_scaleFactor: gameBoard.cellSize/40
     state: "stateMainMenu"
     z: -10
 
