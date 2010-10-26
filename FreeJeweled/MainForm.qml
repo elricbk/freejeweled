@@ -338,6 +338,22 @@ Rectangle {
 
             onClicked: screen.state = "stateMainMenu"
         }
+
+        InGameButton {
+            id: btnChangeScreenSize
+
+            anchors.bottom: parent.bottom
+            anchors.left: btnMenu.right
+            caption: "big"
+            color: "blue"
+
+            onClicked: {
+                if (gameBoard.cellSize > 40)
+                    gameBoard.cellSize = 40;
+                else
+                    gameBoard.cellSize = 80;
+            }
+        }
     }
 
     Text {

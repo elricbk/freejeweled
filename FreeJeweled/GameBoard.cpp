@@ -69,18 +69,17 @@ void GameBoard::initEngine()
     if (m_engineInited)
         return;
 
-    QDeclarativeEngine *engine;
     if (g_mainEngine != NULL) {
-        engine = g_mainEngine;
+        m_engine = g_mainEngine;
     } else {
-        engine = new QDeclarativeEngine();
+        m_engine = new QDeclarativeEngine();
         qDebug() << "[initEngine] Can't use global engine";
     }
 
-    engine->rootContext()->setContextProperty("g_scaleFactor", cellSize()*1.0/40);
+    m_engine->rootContext()->setContextProperty("g_scaleFactor", cellSize()*1.0/40);
 
     /* Gem cell component */
-    m_component = new QDeclarativeComponent(engine, QUrl::fromLocalFile("Block.qml"));
+    m_component = new QDeclarativeComponent(m_engine, QUrl::fromLocalFile("Block.qml"));
     if (!m_component->isReady()) {
         qDebug() << m_component->errors();
         qCritical("[GameBoard] Can't fetch gem component from file");
@@ -88,7 +87,7 @@ void GameBoard::initEngine()
     }
 
     /* Score text component */
-    m_textComponent = new QDeclarativeComponent(engine, QUrl::fromLocalFile("ScoreText.qml"));
+    m_textComponent = new QDeclarativeComponent(m_engine, QUrl::fromLocalFile("ScoreText.qml"));
     if (!m_textComponent->isReady()) {
         qCritical("[GameBoard] Can't fetch score text component from file");
         return;
@@ -1444,5 +1443,6 @@ void GameBoard::setCellSize(int newValue)
     if (newValue != m_cellSize) {
         m_cellSize = newValue;
         emit cellSizeChanged();
+        m_engine->rootContext()->setContextProperty("g_scaleFactor", newValue/SMALL_CELL_SIZE);
     }
 }
