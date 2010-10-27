@@ -50,7 +50,7 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
     m_userInteractionAccepted = true;
     m_gameStarted = false;
     m_gameLost = false;
-    m_cellSize = BIG_CELL_SIZE;
+    m_cellSize = SMALL_CELL_SIZE;
 }
 
 GameBoard::~GameBoard() {
@@ -59,7 +59,7 @@ GameBoard::~GameBoard() {
         saveBoardStateToFile();
     clearBoard();
     delete m_component;
-    delete m_engine;
+    delete m_textComponent;
 }
 
 
@@ -1444,5 +1444,21 @@ void GameBoard::setCellSize(int newValue)
         m_cellSize = newValue;
         emit cellSizeChanged();
         m_engine->rootContext()->setContextProperty("g_scaleFactor", newValue/SMALL_CELL_SIZE);
+        repositionGems();
+    }
+}
+
+/* Method for resizing and repositioning gems when cellSize() have changed */
+void GameBoard::repositionGems()
+{
+    for (int row = 0; row < m_rowCount; ++row) {
+        for (int column = 0; column < m_columnCount; ++column) {
+            if (board(row, column) != NULL) {
+                board(row, column)->setWidth(cellSize());
+                board(row, column)->setHeight(cellSize());
+                board(row, column)->setX(column*cellSize());
+                board(row, column)->setY(row*cellSize());
+            }
+        }
     }
 }

@@ -123,6 +123,7 @@ private:
     bool findCombos();
     bool findCombosInLine(int lineIndex, Direction direction);
     void initEngine();
+    void repositionGems();
 
     QList<GemCell *> m_boardData;
     QList<QPair<QDateTime, QDeclarativeItem *> > m_zombieItems;
