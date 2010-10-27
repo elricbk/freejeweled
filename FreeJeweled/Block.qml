@@ -71,8 +71,8 @@ GemCell {
         }
         opacity: 1
         smooth: true
-        sourceSize.width: 40
-        sourceSize.height: 40
+        sourceSize.width: 80
+        sourceSize.height: 80
 		
         Behavior on opacity {
             NumberAnimation { properties: "opacity"; duration: 400 }

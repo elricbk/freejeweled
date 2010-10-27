@@ -386,7 +386,8 @@ Rectangle {
             width: 50*gameBoard.cellSize/40
             height: 50*gameBoard.cellSize/40
             visible: gameTitle.y > 0
-            source: "pics/big/blueGem.title.png"
+            source: "pics/big/blueGem.svg"
+            sourceSize { width: 100; height: 100 }
             Shine { anchors { leftMargin: 10*gameBoard.cellSize/40; topMargin: 10*gameBoard.cellSize/40 } }
         }
     }
