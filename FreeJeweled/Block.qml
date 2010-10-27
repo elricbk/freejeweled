@@ -12,6 +12,7 @@ GemCell {
     property bool explodable: false
     property bool selected: false
     property int behaviorPause: 0
+    property int srcSize: 80
 
 
     width: 40
@@ -70,9 +71,9 @@ GemCell {
                 return (picsDir() + "yellowGem.svg");
         }
         opacity: 1
-        smooth: true
-        sourceSize.width: 80
-        sourceSize.height: 80
+        smooth: false
+        sourceSize.width: srcSize
+        sourceSize.height: srcSize
 		
         Behavior on opacity {
             NumberAnimation { properties: "opacity"; duration: 400 }

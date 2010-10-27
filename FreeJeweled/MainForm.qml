@@ -363,10 +363,10 @@ Rectangle {
             color: "blue"
 
             onClicked: {
-                if (gameBoard.cellSize > 40)
+                if (gameBoard.cellSize >= 100)
                     gameBoard.cellSize = 40;
                 else
-                    gameBoard.cellSize = 80;
+                    gameBoard.cellSize += 10;
             }
         }
     }

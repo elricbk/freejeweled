@@ -306,6 +306,7 @@ GemCell * GameBoard::createBlock(int row, int column, int startRow)
     curCell->setProperty("x", column*cellSize());
     curCell->setProperty("y", row*cellSize());
     curCell->setProperty("spawned", true);
+    curCell->setProperty("srcSize", cellSize());
     curCell->setModifier(GemCell::Normal);
     m_boardData[index(row, column)] = curCell;
     return curCell;
@@ -1458,6 +1459,7 @@ void GameBoard::repositionGems()
                 board(row, column)->setHeight(cellSize());
                 board(row, column)->setX(column*cellSize());
                 board(row, column)->setY(row*cellSize());
+                board(row, column)->setProperty("srcSize", cellSize());
             }
         }
     }
