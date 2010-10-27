@@ -119,6 +119,9 @@ Rectangle {
             source: "pics/hintArrow.png"
             x: gameBoard.hintX
             y: gameBoard.hintY - height/4
+            width: gameBoard.cellSize
+            height: gameBoard.cellSize/2
+
 
             visible: gameBoard.hintVisible
             z: 5
@@ -126,8 +129,20 @@ Rectangle {
                 running: hintImage.visible
                 SequentialAnimation {
                     loops: Animation.Infinite
-                    PropertyAnimation { target: hintImage; property: "y"; to: gameBoard.hintY - 3*hintImage.height/4; duration: 300; easing.type: Easing.InOutQuad }
-                    PropertyAnimation { target: hintImage; property: "y"; to: gameBoard.hintY - hintImage.height/4; duration: 300; easing.type: Easing.InOutQuad }
+                    PropertyAnimation {
+                        target: hintImage;
+                        property: "y";
+                        to: gameBoard.hintY - 3*hintImage.height/4;
+                        duration: 300;
+                        easing.type: Easing.InOutQuad
+                    }
+                    PropertyAnimation {
+                        target: hintImage;
+                        property: "y";
+                        to: gameBoard.hintY - hintImage.height/4;
+                        duration: 300;
+                        easing.type: Easing.InOutQuad
+                    }
                 }
                 SequentialAnimation {
                     PauseAnimation { duration: 3000 }

@@ -27,31 +27,52 @@ GemCell {
         if (g_scaleFactor > 1)
             return "pics/big/";
         else
-            return "pics/gems/";
+            return "pics/big/";
     }
 
     Image {
         id: img
         anchors.fill: parent
+//        source: {
+//            if (modifier == GemCell.HyperCube) {
+//                return (picsDir() + "hyperCube.resized.png");
+//            } else if (type == 1)
+//                return (picsDir() + "redGem.resized.png");
+//            else if (type == 2)
+//                return (picsDir() + "blueGem.resized.png");
+//            else if (type == 3)
+//                return (picsDir() + "greenGem.resized.png");
+//            else if (type == 4)
+//                return (picsDir() + "purpleGem.resized.png");
+//            else if (type == 5)
+//                return (picsDir() + "whiteGem.resized.png");
+//            else if (type == 6)
+//                return (picsDir() + "orangeGem.resized.png");
+//            else if (type == 0)
+//                return (picsDir() + "yellowGem.resized.png");
+//        }
         source: {
             if (modifier == GemCell.HyperCube) {
-                return (picsDir() + "hyperCube.resized.png");
+                return (picsDir() + "hyperCube.svg");
             } else if (type == 1)
-                return (picsDir() + "redGem.resized.png");
+                return (picsDir() + "redGem.svg");
             else if (type == 2)
-                return (picsDir() + "blueGem.resized.png");
+                return (picsDir() + "blueGem.svg");
             else if (type == 3)
-                return (picsDir() + "greenGem.resized.png");
+                return (picsDir() + "greenGem.svg");
             else if (type == 4)
-                return (picsDir() + "purpleGem.resized.png");
+                return (picsDir() + "purpleGem.svg");
             else if (type == 5)
-                return (picsDir() + "whiteGem.resized.png");
+                return (picsDir() + "whiteGem.svg");
             else if (type == 6)
-                return (picsDir() + "orangeGem.resized.png");
+                return (picsDir() + "orangeGem.svg");
             else if (type == 0)
-                return (picsDir() + "yellowGem.resized.png");
+                return (picsDir() + "yellowGem.svg");
         }
         opacity: 1
+        smooth: true
+        sourceSize.width: 40
+        sourceSize.height: 40
 		
         Behavior on opacity {
             NumberAnimation { properties: "opacity"; duration: 400 }
