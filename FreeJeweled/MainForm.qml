@@ -560,13 +560,13 @@ Rectangle {
                     duration: 500;
                     easing.type: Easing.InOutQuad
                 }
-                ScriptAction {
-                    script: {
-                        gameBoard.clearBoard();
-                        pbLevelProgress.minimum = 0;
-                        pbLevelProgress.maximum = gameBoard.levelCap(1);
-                    }
-                }
+//                ScriptAction {
+//                    script: {
+//                        gameBoard.clearBoard();
+//                        pbLevelProgress.minimum = 0;
+//                        pbLevelProgress.maximum = gameBoard.levelCap(1);
+//                    }
+//                }
             }
         }
     ]
