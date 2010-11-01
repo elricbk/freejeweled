@@ -371,6 +371,19 @@ Rectangle {
     }
 
     Text {
+        id: txtAppVersion
+        text: g_appVersion
+        font.pointSize: 14*g_scaleFactor
+        font.family: titleFont.name
+        color: "lightgray"
+        visible: opacity > 0
+        anchors { bottom: screen.bottom; right: screen.right; margins: 3*g_scaleFactor }
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+    }
+
+    Text {
         id: gameTitle
         text: "<p align=\"center\">Free<br>Jeweled</p>"
         anchors.topMargin: 30*g_scaleFactor
@@ -475,6 +488,10 @@ Rectangle {
             /* Showing About and hiding Settings dialogs */
             PropertyChanges { target: dlgSettings; opacity: 0.0 }
             PropertyChanges { target: dlgAbout; opacity: 1.0 }
+
+            /* Showing info about app version */
+            PropertyChanges { target: txtAppVersion; opacity: 1.0 }
+
             /* Game elements anchors */
             AnchorChanges { target: toolBar; anchors.top: screen.bottom }
         }
@@ -508,6 +525,7 @@ Rectangle {
                     }
                 }
 
+                ScriptAction { script: txtAppVersion.opacity = 0.0 }
                 PropertyAction { target: bgrMainMenu; property: "visible"; value: false }
                 PropertyAction { target: gameBoard; property: "opacity"; value: 1.0 }
                 AnchorAnimation {
@@ -526,12 +544,14 @@ Rectangle {
             to: "stateSettings"
             AnchorAnimation { duration: 500; easing.type: Easing.InOutQuad }
             PropertyAction { target: scoreBox; property: "state"; value: "stateHidden" }
+            ScriptAction { script: txtAppVersion.opacity = 0.0 }
         },
         Transition {
             from: "stateSettings"
             to: "stateMainMenu"
             SequentialAnimation {
                 ScriptAction { script: dlgSettings.opacity = 0.0 }
+                ScriptAction { script: txtAppVersion.opacity = 1.0 }
                 AnchorAnimation { duration: 500; easing.type: Easing.InOutQuad }
             }
         },
@@ -545,6 +565,7 @@ Rectangle {
                             gameBoard.saveBoardStateToFile();
                     }
                 }
+                ScriptAction { script: txtAppVersion.opacity = 1.0 }
                 PropertyAction { target: gameBoard; property: "opacity"; value: 0.0 }
                 PropertyAction { target: scoreBox; property: "state"; value: "stateHidden" }
                 AnchorAnimation { targets: toolBar; duration: 400; }
