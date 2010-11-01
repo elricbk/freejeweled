@@ -3,6 +3,8 @@ import Qt 4.7
 Item {
     id: scoreItem
     opacity: 0
+    width: 40*g_scaleFactor
+    height: 40*g_scaleFactor
 
     property int type: 1
     property int shiftValue: 80*g_scaleFactor

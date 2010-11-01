@@ -15,6 +15,7 @@ Rectangle {
     property color borderColor: "transparent"
     property int borderWidth: 0
     property int fontSize: 12
+    property bool enabled: true
     signal clicked
 
     border { width: borderWidth; color: borderColor }
@@ -23,7 +24,7 @@ Rectangle {
         GradientStop {
             position: 0.0;
             color: {
-                if (!mouseArea.pressed)
+                if (!mouseArea.pressed || !button.enabled)
                     return button.color;
                 else
                     return Qt.darker(button.color);
@@ -32,7 +33,7 @@ Rectangle {
         GradientStop {
             position: 0.2;
             color: {
-                if (!mouseArea.pressed)
+                if (!mouseArea.pressed || !button.enabled)
                     return Qt.lighter(button.color);
                 else
                     return button.color;
@@ -42,7 +43,7 @@ Rectangle {
         GradientStop {
             position: 1.0;
             color: {
-                if (!mouseArea.pressed)
+                if (!mouseArea.pressed || !button.enabled)
                     return button.color;
                 else
                     return Qt.darker(button.color);
@@ -61,6 +62,9 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        onClicked: button.clicked()
+        onClicked: {
+            if (button.enabled)
+                button.clicked()
+        }
     }
 }
