@@ -50,11 +50,26 @@ Rectangle {
         opacity: 0.0
         MouseArea {
             anchors.fill: parent
-            onClicked: screen.state = "stateMainMenu"
+            onClicked: screen.state = "stateSettings"
         }
         Behavior on opacity {
             NumberAnimation { duration: 500 }
         }
+    }
+
+    SettingsDialog {
+        id: dlgSettings
+        visible: opacity > 0
+        opacity: 0.0
+        canIncreaseSize: gameBoard.cellSize < 80
+        canDecreaseSize: gameBoard.cellSize > 40
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+        onSizeDecrease: gameBoard.cellSize -= 10;
+        onSizeIncrease: gameBoard.cellSize += 10;
+        onBackPressed: screen.state = "stateMainMenu"
+        onAboutPressed: screen.state = "stateAbout"
     }
 
     Rectangle {
@@ -353,22 +368,6 @@ Rectangle {
 
             onClicked: screen.state = "stateMainMenu"
         }
-
-        InGameButton {
-            id: btnChangeScreenSize
-
-            anchors.bottom: parent.bottom
-            anchors.left: btnMenu.right
-            caption: "big"
-            color: "blue"
-
-            onClicked: {
-                if (gameBoard.cellSize >= 100)
-                    gameBoard.cellSize = 40;
-                else
-                    gameBoard.cellSize += 10;
-            }
-        }
     }
 
     Text {
@@ -421,11 +420,11 @@ Rectangle {
 
     MainMenuButton {
         id: btnAbout
-        caption: "about"
+        caption: "settings"
         anchors.top: btnAction.bottom
         anchors.margins: 10*g_scaleFactor
         color: "steelblue"
-        onClicked: screen.state = "stateAbout"
+        onClicked: screen.state = "stateSettings"
     }
 
     states: [
@@ -456,7 +455,7 @@ Rectangle {
             AnchorChanges { target: gameBoard; anchors.left: screen.left }
         },
         State {
-            name: "stateAbout"
+            name: "stateSettings"
             /* Main menu elements anchors */
             AnchorChanges { target: gameTitle; anchors.bottom: screen.top }
             AnchorChanges { target: btnClassic; anchors.right: screen.left }
@@ -467,8 +466,17 @@ Rectangle {
             /* Game elements anchors */
             AnchorChanges { target: toolBar; anchors.top: screen.bottom }
 
-            /* Showing About dialog */
+            /* Showing Settings and hiding About dialog */
+            PropertyChanges { target: dlgSettings; opacity: 1.0 }
+            PropertyChanges { target: dlgAbout; opacity: 0.0 }
+        },
+        State {
+            name: "stateAbout"
+            /* Showing About and hiding Settings dialogs */
+            PropertyChanges { target: dlgSettings; opacity: 0.0 }
             PropertyChanges { target: dlgAbout; opacity: 1.0 }
+            /* Game elements anchors */
+            AnchorChanges { target: toolBar; anchors.top: screen.bottom }
         }
     ]
 
@@ -515,15 +523,15 @@ Rectangle {
         },
         Transition {
             from: "stateMainMenu"
-            to: "stateAbout"
+            to: "stateSettings"
             AnchorAnimation { duration: 500; easing.type: Easing.InOutQuad }
             PropertyAction { target: scoreBox; property: "state"; value: "stateHidden" }
         },
         Transition {
-            from: "stateAbout"
+            from: "stateSettings"
             to: "stateMainMenu"
             SequentialAnimation {
-                ScriptAction { script: dlgAbout.opacity = 0.0 }
+                ScriptAction { script: dlgSettings.opacity = 0.0 }
                 AnchorAnimation { duration: 500; easing.type: Easing.InOutQuad }
             }
         },

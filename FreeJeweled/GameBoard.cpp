@@ -1442,7 +1442,8 @@ void GameBoard::setCellSize(int newValue)
     if (newValue != m_cellSize) {
         m_cellSize = newValue;
         emit cellSizeChanged();
-        m_engine->rootContext()->setContextProperty("g_scaleFactor", newValue*1.0/SMALL_CELL_SIZE);
+        if (m_engine != NULL)
+            m_engine->rootContext()->setContextProperty("g_scaleFactor", newValue*1.0/SMALL_CELL_SIZE);
         repositionGems();
     }
 }

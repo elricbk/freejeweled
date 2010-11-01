@@ -97,15 +97,16 @@ GemCell {
 
     Behavior on x {
         enabled: spawned && behaviorEnabled
-        SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
+//        SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
+        PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
     }
 
     Behavior on y {
         enabled: behaviorEnabled
         SequentialAnimation {
             PauseAnimation { duration: Math.floor(behaviorPause*(1 + Math.random()*0.4 - 0.2)) }
-            SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
-//            PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
+//            SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
+            PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
             ScriptAction { script: behaviorPause = 0 }
         }
     }
