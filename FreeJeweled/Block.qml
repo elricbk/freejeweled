@@ -71,7 +71,7 @@ GemCell {
                 return (picsDir() + "yellowGem.svg");
         }
         opacity: 1
-        smooth: false
+        smooth: modifier == GemCell.HyperCube
         sourceSize.width: srcSize
         sourceSize.height: srcSize
 		
@@ -138,6 +138,15 @@ GemCell {
             PropertyChanges { target: img; opacity: 0 }
         }
     ]
+
+    NumberAnimation {
+        target: img;
+        running: modifier == GemCell.HyperCube
+        property: "rotation";
+        to: 360;
+        duration: 4000;
+        loops: Animation.Infinite
+    }
 
     Particles {
         id: particles
