@@ -2,8 +2,8 @@ import Qt 4.7
 
 Item {
     id: shineItem
-    width: /*gameCanvas.blockSize*/ 30*g_scaleFactor
-    height: /*gameCanvas.blockSize*/ 30*g_scaleFactor
+    width: 30*g_scaleFactor
+    height: 30*g_scaleFactor
     z: 5
     property int animationDuration: 9000
 
@@ -11,13 +11,13 @@ Item {
         id: firstShine
         opacity: 0.8
         anchors.fill: parent
-        source: "pics/effects/shine.png"
+        source: "../pics/effects/shine.png"
     }
 
     Image {
         id: secondShine
         anchors.fill: parent
-        source: "pics/effects/shine.png"
+        source: "../pics/effects/shine.png"
     }
 
     ParallelAnimation {

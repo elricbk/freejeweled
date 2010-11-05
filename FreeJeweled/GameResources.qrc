@@ -1,0 +1,41 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pics/gems/yellowGem.svg</file>
+        <file>pics/gems/blueGem.svg</file>
+        <file>pics/gems/greenGem.svg</file>
+        <file>pics/gems/hyperCube.svg</file>
+        <file>pics/gems/orangeGem.svg</file>
+        <file>pics/gems/purpleGem.svg</file>
+        <file>pics/gems/redGem.svg</file>
+        <file>pics/gems/whiteGem.svg</file>
+        <file>qml/Shine.qml</file>
+        <file>qml/AboutDialog.qml</file>
+        <file>qml/BaseButton.qml</file>
+        <file>qml/Block.qml</file>
+        <file>qml/Cloud.qml</file>
+        <file>qml/EndOfGameDialog.qml</file>
+        <file>qml/InGameButton.qml</file>
+        <file>qml/LoadDialogButton.qml</file>
+        <file>qml/LoadSavedGameDialog.qml</file>
+        <file>qml/MainMenuButton.qml</file>
+        <file>qml/MsgText.qml</file>
+        <file>qml/ProgressBar.qml</file>
+        <file>qml/ScoreText.qml</file>
+        <file>qml/SettingsDialog.qml</file>
+        <file>MainForm.qml</file>
+        <file>fonts/redcircle.ttf</file>
+        <file>fonts/forgotte.ttf</file>
+        <file>fonts/mailrays.ttf</file>
+        <file>fonts/pirulen.ttf</file>
+        <file>pics/selectionBorder.png</file>
+        <file>pics/effects/arrows.png</file>
+        <file>pics/effects/shine.png</file>
+        <file>pics/stars/yellowStar.new.png</file>
+        <file>pics/stars/blueStar.new.png</file>
+        <file>pics/stars/greenStar.new.png</file>
+        <file>pics/stars/orangeStar.new.png</file>
+        <file>pics/stars/purpleStar.new.png</file>
+        <file>pics/stars/redStar.new.png</file>
+        <file>pics/stars/whiteStar.new.png</file>
+    </qresource>
+</RCC>

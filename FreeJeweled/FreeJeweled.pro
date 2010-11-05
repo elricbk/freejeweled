@@ -37,4 +37,22 @@ OTHER_FILES += \
     LoadDialogButton.qml \
     InGameButton.qml \
     test.board \
-    SettingsDialog.qml
+    SettingsDialog.qml \
+    qml/SettingsDialog.qml \
+    qml/ScoreText.qml \
+    qml/ProgressBar.qml \
+    qml/MsgText.qml \
+    qml/MainMenuButton.qml \
+    qml/LoadSavedGameDialog.qml \
+    qml/LoadDialogButton.qml \
+    qml/InGameButton.qml \
+    qml/EndOfGameDialog.qml \
+    qml/Cloud.qml \
+    qml/Block.qml \
+    qml/BaseButton.qml \
+    qml/AboutDialog.qml \
+    qml/Shine.qml
+
+RESOURCES += \
+    GameResources.qrc \
+    Backgrounds.qrc

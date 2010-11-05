@@ -25,7 +25,7 @@ GemCell {
     }
 
     function picsDir() {
-            return "pics/gems/";
+            return ":/pics/gems/";
     }
 
     Image {
@@ -139,19 +139,19 @@ GemCell {
         velocity: 200; velocityDeviation: 120
         source: {
             if (type == 1)
-                return "pics/stars/redStar.new.png";
+                return ":/pics/stars/redStar.new.png";
             else if (type == 2)
-                return "pics/stars/blueStar.new.png";
+                return ":/pics/stars/blueStar.new.png";
             else if (type == 3)
-                return "pics/stars/greenStar.new.png";
+                return ":/pics/stars/greenStar.new.png";
             else if (type == 4)
-                return "pics/stars/purpleStar.new.png";
+                return ":/pics/stars/purpleStar.new.png";
             else if (type == 5)
-                return "pics/stars/whiteStar.new.png";
+                return ":/pics/stars/whiteStar.new.png";
             else if (type == 6)
-                return "pics/stars/orangeStar.new.png";
+                return ":/pics/stars/orangeStar.new.png";
             else
-                return "pics/stars/yellowStar.new.png";
+                return ":/pics/stars/yellowStar.new.png";
         }
     }
 }

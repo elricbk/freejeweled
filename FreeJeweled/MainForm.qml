@@ -1,5 +1,6 @@
 import Qt 4.7
 import com.mycompany.gemcell 1.0
+import "qml"
 
 Rectangle {
     id: screen

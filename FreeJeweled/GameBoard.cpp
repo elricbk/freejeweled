@@ -79,7 +79,7 @@ void GameBoard::initEngine()
     m_engine->rootContext()->setContextProperty("g_scaleFactor", cellSize()*1.0/40);
 
     /* Gem cell component */
-    m_component = new QDeclarativeComponent(m_engine, QUrl::fromLocalFile("Block.qml"));
+    m_component = new QDeclarativeComponent(m_engine, QUrl("qrc:/qml/Block.qml"));
     if (!m_component->isReady()) {
         qDebug() << m_component->errors();
         qCritical("[GameBoard] Can't fetch gem component from file");
@@ -87,7 +87,7 @@ void GameBoard::initEngine()
     }
 
     /* Score text component */
-    m_textComponent = new QDeclarativeComponent(m_engine, QUrl::fromLocalFile("ScoreText.qml"));
+    m_textComponent = new QDeclarativeComponent(m_engine, QUrl("qrc:/qml/ScoreText.qml"));
     if (!m_textComponent->isReady()) {
         qCritical("[GameBoard] Can't fetch score text component from file");
         return;

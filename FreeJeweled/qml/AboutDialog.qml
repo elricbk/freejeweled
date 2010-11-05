@@ -4,7 +4,7 @@ Item {
     id: dlgAbout
     anchors.fill: parent
 
-    FontLoader { id: aboutFont; source: "fonts/forgotte.ttf" }
+    FontLoader { id: aboutFont; source: "../fonts/forgotte.ttf" }
     Rectangle {
         anchors.fill: dlgAbout
         color: "black"
