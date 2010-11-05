@@ -24,14 +24,14 @@ Rectangle {
         if (bgrStr.length == 1) {
             bgrStr = "0" + bgrStr;
         }
-        return "pics/backgrounds/bgr" + bgrStr + ".jpg";
+        return ":/pics/backgrounds/bgr" + bgrStr + ".jpg";
     }
 
     SystemPalette { id: activePalette }
 
-    FontLoader { id: gameFont; source: "fonts/mailrays.ttf" }
-    FontLoader { id: buttonFont; source: "fonts/pirulen.ttf" }
-    FontLoader { id: titleFont; source: "fonts/redcircle.ttf" }
+    FontLoader { id: gameFont; source: ":/fonts/mailrays.ttf" }
+    FontLoader { id: buttonFont; source: ":/fonts/pirulen.ttf" }
+    FontLoader { id: titleFont; source: ":/fonts/redcircle.ttf" }
 
     Image {
         id: background
@@ -42,7 +42,7 @@ Rectangle {
     Image {
         id: bgrMainMenu
         anchors.fill: parent
-        source: "pics/backgrounds/bgr00.jpg"
+        source: ":/pics/backgrounds/bgr00.jpg"
     }
 
     AboutDialog {
@@ -110,7 +110,7 @@ Rectangle {
         }
 
         Image {
-            source: "pics/field.png"
+            source: ":/pics/field.png"
             anchors.fill: parent
         }
 
@@ -124,7 +124,7 @@ Rectangle {
 
             Image {
                 anchors.fill: parent
-                source: "pics/selectionBorder.png"
+                source: ":/pics/selectionBorder.png"
                 opacity: 0.8
                 fillMode: Image.PreserveAspectCrop
             }
@@ -132,7 +132,7 @@ Rectangle {
 
         Image {
             id: hintImage
-            source: "pics/hintArrow.svg"
+            source: ":/pics/hintArrow.svg"
             x: gameBoard.hintX
             y: gameBoard.hintY - height/4
             width: gameBoard.cellSize

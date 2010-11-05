@@ -37,5 +37,8 @@
         <file>pics/stars/purpleStar.new.png</file>
         <file>pics/stars/redStar.new.png</file>
         <file>pics/stars/whiteStar.new.png</file>
+        <file>pics/appIcon.small.png</file>
+        <file>pics/field.png</file>
+        <file>pics/backgrounds/bgr00.jpg</file>
     </qresource>
 </RCC>
