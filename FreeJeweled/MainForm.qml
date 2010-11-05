@@ -131,11 +131,13 @@ Rectangle {
 
         Image {
             id: hintImage
-            source: "pics/hintArrow.png"
+            source: "pics/hintArrow.svg"
             x: gameBoard.hintX
             y: gameBoard.hintY - height/4
             width: gameBoard.cellSize
             height: gameBoard.cellSize/2
+            sourceSize.width: width
+            sourceSize.height: height
 
 
             visible: gameBoard.hintVisible
