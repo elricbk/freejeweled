@@ -72,11 +72,29 @@ GemCell {
             visible: (modifier == GemCell.RowColumnRemove)
             anchors.fill: parent
         }
+
+        Image {
+            id: cloudBack
+            visible: (modifier == GemCell.RowColumnRemove)
+            source: ":/pics/effects/cloudBack.svg"
+            z: -5
+            anchors.centerIn: parent
+            sourceSize { width: parent.width*1.2; height: parent.height*1.2 }
+            width: sourceSize.width
+            height: sourceSize.height
+            NumberAnimation {
+                target: cloudBack;
+                running: cloudBack.visible
+                property: "rotation";
+                to: -360;
+                duration: 8000;
+                loops: Animation.Infinite
+            }
+        }
     }
 
     Behavior on x {
         enabled: spawned && behaviorEnabled
-//        SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
         PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
     }
 
@@ -84,7 +102,6 @@ GemCell {
         enabled: behaviorEnabled
         SequentialAnimation {
             PauseAnimation { duration: Math.floor(behaviorPause*(1 + Math.random()*0.4 - 0.2)) }
-//            SpringAnimation { spring: 2; damping: 0.2; duration: 200 }
             PropertyAnimation { duration: 400; easing.type: Easing.OutBack }
             ScriptAction { script: behaviorPause = 0 }
         }

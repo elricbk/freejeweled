@@ -41,5 +41,8 @@
         <file>pics/field.png</file>
         <file>pics/backgrounds/bgr00.jpg</file>
         <file>pics/hintArrow.svg</file>
+        <file>pics/effects/cloudBack.svg</file>
+        <file>pics/effects/cloudFront.svg</file>
+        <file>pics/effects/shine.svg</file>
     </qresource>
 </RCC>

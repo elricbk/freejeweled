@@ -2,23 +2,31 @@ import Qt 4.7
 
 Item {
     id: cloudItem
-    width: 30
-    height: 30
+    width:  40*g_scaleFactor
+    height:  40*g_scaleFactor
     z: 5
     property int animationDuration: 9000
 
     Image {
-        id: cloudImage
-        anchors.centerIn: parent
-        source: ":/pics/effects/arrows.png"
+        id: cloudImageOuter
+        anchors.fill: parent
+        source: ":/pics/effects/cloudFront.svg"
+        smooth: true
+        sourceSize.width: cloudItem.width
+        sourceSize.height: cloudItem.height
+    }
+
+    Image {
+        id: cloudImageInner
+        anchors.fill: parent
+        source: ":/pics/effects/cloudFront.svg"
+        scale: 0.0
 
         SequentialAnimation {
             running: cloudItem.visible
             loops: Animation.Infinite
-            NumberAnimation { target: cloudImage; property: "scale"; to: 0.8; duration: 150 }
-            NumberAnimation { target: cloudImage; property: "scale"; to: 1.0; duration: 150 }
-            NumberAnimation { target: cloudImage; property: "scale"; to: 0.8; duration: 150 }
-            NumberAnimation { target: cloudImage; property: "scale"; to: 1.0; duration: 150 }
+            NumberAnimation { target: cloudImageInner; property: "scale"; to: 1.0; duration: 500 }
+            PropertyAction { target: cloudImageInner; property: "scale"; value: 0.0 }
             PauseAnimation { duration: 500 }
         }
     }

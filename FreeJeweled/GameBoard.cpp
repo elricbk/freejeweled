@@ -1251,6 +1251,14 @@ bool GameBoard::hasPossibleCombos(int *hintIdx)
     /* As we're going to swap to the right and to the bottom add -1 to column/row count */
     for (int row = 0; row < m_rowCount; ++row) {
         for (int column = 0; column < m_columnCount; ++column) {
+            /* Checking object for hypercube modififer, which automatically means possible combo */
+           GemCell *cell = safeGetCell(row, column);
+           if ((cell != NULL) && (cell->modifier() == GemCell::HyperCube)) {
+               if (hintIdx != NULL)
+                   *hintIdx = index(row, column);
+               return true;
+           }
+
             /* Swapping right */
             if (column != m_columnCount - 1) {
                 m_boardData.swap(index(row, column), index(row, column + 1));

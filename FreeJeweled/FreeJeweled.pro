@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui declarative
+QT       += core declarative
 
 TARGET = FreeJeweled
 TEMPLATE = app
