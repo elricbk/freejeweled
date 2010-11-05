@@ -25,33 +25,12 @@ GemCell {
     }
 
     function picsDir() {
-        if (g_scaleFactor > 1)
-            return "pics/big/";
-        else
-            return "pics/big/";
+            return "pics/gems/";
     }
 
     Image {
         id: img
         anchors.fill: parent
-//        source: {
-//            if (modifier == GemCell.HyperCube) {
-//                return (picsDir() + "hyperCube.resized.png");
-//            } else if (type == 1)
-//                return (picsDir() + "redGem.resized.png");
-//            else if (type == 2)
-//                return (picsDir() + "blueGem.resized.png");
-//            else if (type == 3)
-//                return (picsDir() + "greenGem.resized.png");
-//            else if (type == 4)
-//                return (picsDir() + "purpleGem.resized.png");
-//            else if (type == 5)
-//                return (picsDir() + "whiteGem.resized.png");
-//            else if (type == 6)
-//                return (picsDir() + "orangeGem.resized.png");
-//            else if (type == 0)
-//                return (picsDir() + "yellowGem.resized.png");
-//        }
         source: {
             if (modifier == GemCell.HyperCube) {
                 return (picsDir() + "hyperCube.svg");

@@ -397,9 +397,10 @@ Rectangle {
             anchors.centerIn: parent
             width: 50*g_scaleFactor
             height: 50*g_scaleFactor
+            sourceSize.width: width
+            sourceSize.height: height
             visible: gameTitle.y > 0
-            source: "pics/big/blueGem.svg"
-            sourceSize { width: 100; height: 100 }
+            source: "pics/gems/blueGem.svg"
             Shine { anchors { leftMargin: 10*g_scaleFactor; topMargin: 10*g_scaleFactor } }
         }
     }
