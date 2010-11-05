@@ -5,6 +5,8 @@ Item {
     opacity: 0
     width: 40*g_scaleFactor
     height: 40*g_scaleFactor
+    /* Should be in front of gems */
+    z: 2
 
     property int type: 1
     property int shiftValue: 80*g_scaleFactor
