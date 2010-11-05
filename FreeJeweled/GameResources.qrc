@@ -40,5 +40,6 @@
         <file>pics/appIcon.small.png</file>
         <file>pics/field.png</file>
         <file>pics/backgrounds/bgr00.jpg</file>
+        <file>pics/hintArrow.svg</file>
     </qresource>
 </RCC>
