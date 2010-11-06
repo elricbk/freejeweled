@@ -23,7 +23,6 @@
         <file>qml/ScoreText.qml</file>
         <file>qml/SettingsDialog.qml</file>
         <file>MainForm.qml</file>
-        <file>fonts/redcircle.ttf</file>
         <file>fonts/forgotte.ttf</file>
         <file>fonts/mailrays.ttf</file>
         <file>fonts/pirulen.ttf</file>
@@ -45,5 +44,6 @@
         <file>pics/effects/cloudFront.svg</file>
         <file>pics/effects/shine.svg</file>
         <file>pics/field.svg</file>
+        <file>pics/titleText.svg</file>
     </qresource>
 </RCC>

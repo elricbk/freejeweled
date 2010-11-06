@@ -31,7 +31,6 @@ Rectangle {
 
     FontLoader { id: gameFont; source: ":/fonts/mailrays.ttf" }
     FontLoader { id: buttonFont; source: ":/fonts/pirulen.ttf" }
-    FontLoader { id: titleFont; source: ":/fonts/redcircle.ttf" }
 
     Image {
         id: background
@@ -380,7 +379,7 @@ Rectangle {
         id: txtAppVersion
         text: g_appVersion
         font.pointSize: 14*g_scaleFactor
-        font.family: titleFont.name
+        font.family: buttonFont.name
         color: "lightgray"
         visible: opacity > 0
         anchors { bottom: screen.bottom; right: screen.right; margins: 3*g_scaleFactor }
@@ -389,15 +388,14 @@ Rectangle {
         }
     }
 
-    Text {
+    Image {
         id: gameTitle
-        text: "<p align=\"center\">Free<br>Jeweled</p>"
         anchors.topMargin: 30*g_scaleFactor
         anchors.horizontalCenter: parent.horizontalCenter
-        font.bold: true
-        font.pointSize: 36*g_scaleFactor
-        font.family: titleFont.name
-        color: "lightgray"
+        width: parent.width*0.9
+        height: 126./346.*width
+        source: ":/pics/titleText.svg"
+        sourceSize { width: gameTitle.width; height: gameTitle.height }
 
         Image {
             anchors.centerIn: parent
@@ -406,7 +404,7 @@ Rectangle {
             sourceSize.width: width
             sourceSize.height: height
             visible: gameTitle.y > 0
-            source: "pics/gems/blueGem.svg"
+            source: ":/pics/gems/blueGem.svg"
             Shine { anchors { leftMargin: 10*g_scaleFactor; topMargin: 10*g_scaleFactor } }
         }
     }
