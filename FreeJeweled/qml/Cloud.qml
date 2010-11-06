@@ -21,6 +21,9 @@ Item {
         anchors.fill: parent
         source: ":/pics/effects/cloudFront.svg"
         scale: 0.0
+        smooth: true
+        sourceSize.width: cloudItem.width
+        sourceSize.height: cloudItem.height
 
         SequentialAnimation {
             running: cloudItem.visible
