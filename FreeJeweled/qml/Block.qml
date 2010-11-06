@@ -82,6 +82,7 @@ GemCell {
             sourceSize { width: parent.width*1.2; height: parent.height*1.2 }
             width: sourceSize.width
             height: sourceSize.height
+            smooth: true
             NumberAnimation {
                 target: cloudBack;
                 running: cloudBack.visible

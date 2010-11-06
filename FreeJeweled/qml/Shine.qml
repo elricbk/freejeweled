@@ -11,15 +11,17 @@ Item {
         id: firstShine
         opacity: 0.8
         anchors.fill: parent
-        source: ":/pics/effects/shine.png"
-//        sourceSize { width: shineItem.width; height: shineItem.height }
+        source: ":/pics/effects/shine.svg"
+        smooth: true
+        sourceSize { width: shineItem.width; height: shineItem.height }
     }
 
     Image {
         id: secondShine
         anchors.fill: parent
-        source: ":/pics/effects/shine.png"
-//        sourceSize { width: shineItem.width; height: shineItem.height }
+        source: ":/pics/effects/shine.svg"
+        smooth: true
+        sourceSize { width: shineItem.width; height: shineItem.height }
     }
 
     ParallelAnimation {
