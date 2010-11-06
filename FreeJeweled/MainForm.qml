@@ -110,8 +110,11 @@ Rectangle {
         }
 
         Image {
-            source: ":/pics/field.png"
+            id: gbBackground
+            source: ":/pics/field.svg"
             anchors.fill: parent
+            sourceSize.width: gbBackground.width
+            sourceSize.height: gbBackground.height
         }
 
         Item {

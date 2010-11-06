@@ -44,5 +44,6 @@
         <file>pics/effects/cloudBack.svg</file>
         <file>pics/effects/cloudFront.svg</file>
         <file>pics/effects/shine.svg</file>
+        <file>pics/field.svg</file>
     </qresource>
 </RCC>
