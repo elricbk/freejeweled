@@ -1410,10 +1410,11 @@ bool GameBoard::findCombosInLine(int lineIndex, Direction direction)
     return false;
 }
 
-/* Function for graphical effect of dropping gems down. Used when there are no more moves */
+/* Function for graphical effect of dropping gems down. Used when there are no more moves or on
+level up. Gems are neither removed from nor deleted. This method is only for animation. */
 void GameBoard::dropGemsDown()
 {
-    QDateTime now = QDateTime::currentDateTime();
+//    QDateTime now = QDateTime::currentDateTime();
     for (int column = 0; column < m_columnCount; ++column) {
         int pause = 0;
         for (int row = m_rowCount - 1; row >= 0; --row) {
@@ -1421,8 +1422,8 @@ void GameBoard::dropGemsDown()
                 pause += rand() % 100;
                 board(row, column)->setProperty("behaviorPause", pause);
                 board(row, column)->setProperty("y", (row + m_rowCount + 1)*cellSize());
-                m_zombieItems.append(qMakePair(now, (QDeclarativeItem *)board(row, column)));
-                setCell(row, column, NULL);
+//                m_zombieItems.append(qMakePair(now, (QDeclarativeItem *)board(row, column)));
+//                setCell(row, column, NULL);
             }
         }
     }
