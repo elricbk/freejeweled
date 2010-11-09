@@ -27,8 +27,6 @@
         <file>fonts/mailrays.ttf</file>
         <file>fonts/pirulen.ttf</file>
         <file>pics/selectionBorder.png</file>
-        <file>pics/effects/arrows.png</file>
-        <file>pics/effects/shine.png</file>
         <file>pics/stars/yellowStar.new.png</file>
         <file>pics/stars/blueStar.new.png</file>
         <file>pics/stars/greenStar.new.png</file>
@@ -37,8 +35,6 @@
         <file>pics/stars/redStar.new.png</file>
         <file>pics/stars/whiteStar.new.png</file>
         <file>pics/appIcon.small.png</file>
-        <file>pics/field.png</file>
-        <file>pics/backgrounds/bgr00.jpg</file>
         <file>pics/hintArrow.svg</file>
         <file>pics/effects/cloudBack.svg</file>
         <file>pics/effects/cloudFront.svg</file>

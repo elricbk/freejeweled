@@ -177,7 +177,7 @@ Rectangle {
             msgText.text = "NO MORE MOVES";
             msgText.font.pointSize = 30*g_scaleFactor;
             msgText.show();
-            dlgEndGame.show("Your result\nLevel: " + gameBoard.level + "\nScore: " + gameBoard.score);
+            dlgEndGame.show();
         }
     }
 
