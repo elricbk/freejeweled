@@ -18,7 +18,8 @@ SOURCES += main.cpp\
 HEADERS  += \
     GemCell.h \
     GameBoard.h \
-    Globals.h
+    Globals.h \
+    DebugObject.h
 
 FORMS    +=
 

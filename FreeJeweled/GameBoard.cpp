@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "Globals.h"
+#include "DebugObject.h"
 
 const int SMALL_CELL_SIZE = 40;
 const int BIG_CELL_SIZE = 80;
@@ -73,7 +74,8 @@ void GameBoard::initEngine()
         m_engine = g_mainEngine;
     } else {
         m_engine = new QDeclarativeEngine();
-        qDebug() << "[initEngine] Can't use global engine";
+        g_DbgObj() << "[initEngine] Can't use global engine";
+        g_DbgObj().flush();
     }
 
     m_engine->rootContext()->setContextProperty("g_scaleFactor", cellSize()*1.0/40);
@@ -81,15 +83,16 @@ void GameBoard::initEngine()
     /* Gem cell component */
     m_component = new QDeclarativeComponent(m_engine, QUrl("qrc:/qml/Block.qml"));
     if (!m_component->isReady()) {
-        qDebug() << m_component->errors();
-        qCritical("[GameBoard] Can't fetch gem component from file");
+        g_DbgObj() << "[GameBoard] Can't fetch gem component from file";
+        g_DbgObj().flush();
         return;
     }
 
     /* Score text component */
     m_textComponent = new QDeclarativeComponent(m_engine, QUrl("qrc:/qml/ScoreText.qml"));
     if (!m_textComponent->isReady()) {
-        qCritical("[GameBoard] Can't fetch score text component from file");
+        g_DbgObj() << "[GameBoard] Can't fetch score text component from file";
+        g_DbgObj().flush();
         return;
     }
 
