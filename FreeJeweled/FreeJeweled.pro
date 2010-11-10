@@ -9,7 +9,6 @@ QT       += core declarative
 TARGET = FreeJeweled
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
     GemCell.cpp \
     GameBoard.cpp \

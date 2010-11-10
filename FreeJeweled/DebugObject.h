@@ -7,8 +7,12 @@
 QTextStream& g_DbgObj()
 {
     static QFile* outFile = new QFile("debug.txt");
+    static bool fileOpened = false;
     Q_CHECK_PTR(outFile);
-    outFile->open(QFile::WriteOnly);
+    if (!fileOpened) {
+        outFile->open(QFile::WriteOnly);
+        fileOpened = true;
+    }
     static QTextStream* dbgObject = new QTextStream(outFile);
     return (*dbgObject);
 }

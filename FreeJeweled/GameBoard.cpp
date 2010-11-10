@@ -83,7 +83,21 @@ void GameBoard::initEngine()
     /* Gem cell component */
     m_component = new QDeclarativeComponent(m_engine, QUrl("qrc:/qml/Block.qml"));
     if (!m_component->isReady()) {
-        g_DbgObj() << "[GameBoard] Can't fetch gem component from file";
+        g_DbgObj() << "[GameBoard] Can't fetch gem component from file" << "\r\n";
+        g_DbgObj() << "[GameBoard] Ready: " << m_component->isReady() << "\r\n";
+        g_DbgObj() << "[GameBoard] Error: " << m_component->isError() << "\r\n";
+        g_DbgObj() << "[GameBoard] Loading: " << m_component->isLoading() << "\r\n";
+        g_DbgObj() << "[GameBoard] Null: " << m_component->isNull() << "\r\n";
+        g_DbgObj() << "[GameBoard] importPathList\r\n";
+        g_DbgObj() << g_mainEngine->importPathList().join("\r\n") << "\r\n";
+        if (m_component->isError()) {
+            QListIterator<QDeclarativeError> i(m_component->errors());
+            g_DbgObj() << "[GameBoard] Component errors: " << "\r\n";
+            while (i.hasNext()) {
+                QDeclarativeError error = i.next();
+                g_DbgObj() << "\t" << error.toString() << "\r\n";
+            }
+        }
         g_DbgObj().flush();
         return;
     }
