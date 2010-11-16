@@ -404,7 +404,7 @@ Rectangle {
             sourceSize.width: width
             sourceSize.height: height
             visible: gameTitle.y > 0
-            source: ":/pics/gems/blueGem.svg"
+            source: ":/pics/gems/orangeGem.svg"
             Shine { anchors { leftMargin: 10*g_scaleFactor; topMargin: 10*g_scaleFactor } }
         }
     }

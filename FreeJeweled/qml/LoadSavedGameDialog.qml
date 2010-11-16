@@ -51,7 +51,7 @@ Rectangle {
 
     LoadDialogButton {
         id: btnLoadSaved
-        caption: "Load game"
+        caption: "Continue"
         color: "blue"
         anchors.top: btnNewGame.bottom
         onClicked: {
