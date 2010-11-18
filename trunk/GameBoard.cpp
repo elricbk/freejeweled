@@ -500,6 +500,7 @@ void GameBoard::removeAll() {
             switchGems(m_usrIdx1, m_usrIdx2);
             m_gemMovedByUser = false;
         } else if (!hasPossibleCombos()) {
+            checkForHighScore();
             emit noMoreMoves();
             m_gameLost = true;
             QTimer::singleShot(800, this, SLOT(dropGemsDown()));
@@ -1498,9 +1499,19 @@ instance */
 QVariant GameBoard::settings(QString settingKey)
 {
     if (!settingKey.isEmpty()) {
-        QSettings settings("gameSettings.ini", QSettings::IniFormat);
-        return settings.value(settingKey);
+        QSettings gameSettings("gameSettings.ini", QSettings::IniFormat);
+        return gameSettings.value(settingKey);
     } else {
         return QString();
+    }
+}
+
+/* Checking and setting new high score. Method is called when game is lost. */
+void GameBoard::checkForHighScore()
+{
+    QSettings gameSettings("gameSettings.ini", QSettings::IniFormat);
+    if (score() >= gameSettings.value("classic/highScore").toInt()) {
+        gameSettings.setValue("classic/highScore", score());
+        gameSettings.sync();
     }
 }

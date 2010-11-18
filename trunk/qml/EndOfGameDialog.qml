@@ -64,23 +64,37 @@ Rectangle {
     }
 
     Text {
-        id: valueLevel
+        id: lblHighScore
         color: "white"
-        text: gameBoard.level
-        anchors.top: titleText.bottom
+        text: "High score"
+        anchors.top: lblScore.bottom
         anchors.margins: 20*gameBoard.cellSize/40
         font.pointSize: 16*gameBoard.cellSize/40
         font.family: buttonFont.name
     }
 
     Text {
+        id: valueLevel
+        color: "white"
+        text: gameBoard.level
+        anchors { top: titleText.bottom; margins: 20*gameBoard.cellSize/40 }
+        font { pointSize: 16*gameBoard.cellSize/40; family: buttonFont.name }
+    }
+
+    Text {
+        id: valueHighScore
+        color: "white"
+        text: gameBoard.settings("classic/highScore")
+        anchors { top: valueScore.bottom; margins: 20*gameBoard.cellSize/40 }
+        font { pointSize: 16*gameBoard.cellSize/40; family: buttonFont.name }
+    }
+
+    Text {
         id: valueScore
         color: "white"
         text: gameBoard.score
-        anchors.top: valueLevel.bottom
-        anchors.margins: 20*gameBoard.cellSize/40
-        font.pointSize: 16*gameBoard.cellSize/40
-        font.family: buttonFont.name
+        anchors { top: valueLevel.bottom; margins: 20*gameBoard.cellSize/40 }
+        font { pointSize: 16*gameBoard.cellSize/40; family: buttonFont.name }
     }
 
     states: [
@@ -90,8 +104,13 @@ Rectangle {
             AnchorChanges { target: titleText; anchors.top: page.top }
             AnchorChanges { target: lblLevel; anchors.left: page.left }
             AnchorChanges { target: lblScore; anchors.left: page.left }
+            AnchorChanges { target: lblHighScore; anchors.left: page.left }
             AnchorChanges { target: valueLevel; anchors.right: page.right }
             AnchorChanges { target: valueScore; anchors.right: page.right }
+            AnchorChanges { target: valueHighScore; anchors.right: page.right }
+            StateChangeScript {
+                script: valueHighScore.text = gameBoard.settings("classic/highScore")
+            }
         },
         State {
             name: "stateHidden"
@@ -99,8 +118,10 @@ Rectangle {
             AnchorChanges { target: titleText; anchors.top: page.bottom }
             AnchorChanges { target: lblLevel; anchors.right: page.left }
             AnchorChanges { target: lblScore; anchors.right: page.left }
+            AnchorChanges { target: lblHighScore; anchors.right: page.left }
             AnchorChanges { target: valueLevel; anchors.left: page.right }
             AnchorChanges { target: valueScore; anchors.left: page.right }
+            AnchorChanges { target: valueHighScore; anchors.left: page.right }
             AnchorChanges { target: page; anchors.bottom: parent.top }
         }
     ]
@@ -112,7 +133,8 @@ Rectangle {
             SequentialAnimation {
                 /* Turning labeles and scores invisible */
                 PropertyAction {
-                    targets: [lblLevel, lblScore, valueLevel, valueScore, titleText];
+                    targets: [lblLevel, lblScore, valueLevel, valueScore, titleText, lblHighScore
+                        , valueHighScore];
                     properties: "visible";
                     value: false
                 }
@@ -128,7 +150,8 @@ Rectangle {
                 /* Turning labeles and scores visible and show 'em */
                 PauseAnimation { duration: 500 }
                 PropertyAction {
-                    targets: [lblLevel, lblScore, valueLevel, valueScore];
+                    targets: [lblLevel, lblScore, valueLevel, valueScore, lblHighScore
+                        , valueHighScore];
                     properties: "visible";
                     value: true
                 }
