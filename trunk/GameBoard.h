@@ -65,6 +65,7 @@ public:
     Q_INVOKABLE int levelCap(int level);
     Q_INVOKABLE void showHint();
     Q_INVOKABLE bool hasSave();
+    Q_INVOKABLE QVariant settings(QString settingKey);
 
 public slots:
     Q_INVOKABLE void dropGemsDown();

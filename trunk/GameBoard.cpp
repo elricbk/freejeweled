@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QSettings>
 #include "Globals.h"
 #include "DebugObject.h"
 
@@ -32,6 +33,8 @@ GameBoard::GameBoard(QDeclarativeItem *parent): QDeclarativeItem(parent)
 
     /* Will create engine on demand */
     m_engineInited = false;
+    m_component = NULL;
+    m_textComponent = NULL;
 
     /* Setting initial values for level and score */
     setLevel(1);
@@ -1487,5 +1490,17 @@ void GameBoard::repositionGems()
                 board(row, column)->setProperty("srcSize", cellSize());
             }
         }
+    }
+}
+
+/* Method for getting settings. It should be used in QML to get settings information from GameBoard
+instance */
+QVariant GameBoard::settings(QString settingKey)
+{
+    if (!settingKey.isEmpty()) {
+        QSettings settings("gameSettings.ini", QSettings::IniFormat);
+        return settings.value(settingKey);
+    } else {
+        return QString();
     }
 }
